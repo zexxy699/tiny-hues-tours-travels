@@ -76,7 +76,7 @@ function renderSiteSettings() {
   if (facebook && s.facebook) facebook.href = s.facebook;
 }
 
-const inquiryRateLimit = { key: 'tinyHuesInquiryRate', max: 3, windowMs: 60 * 60 * 1000, cooldownMs: 15 * 1000 };
+const inquiryRateLimit = { key: 'tinyHuesInquiryRateV2', max: 10, windowMs: 60 * 60 * 1000, cooldownMs: 5 * 1000 };
 function getInquiryRateState() {
   try { return JSON.parse(localStorage.getItem(inquiryRateLimit.key)) || { count: 0, windowStart: Date.now(), lastSubmitted: 0 }; } catch { return { count: 0, windowStart: Date.now(), lastSubmitted: 0 }; }
 }
@@ -93,7 +93,14 @@ async function sendInquiry(payload) {
   if (window.location.protocol === 'file:') return { ok: true, localOnly: true };
   const response = await fetch('/api/inquiry', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
   const result = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(result.error || 'We could not send your enquiry.');
+  if (!response.ok) {
+    if (response.status === 429) {
+      const retryAfter = Number(result.retryAfter || response.headers.get('Retry-After') || 0);
+      const waitText = retryAfter >= 60 ? `about ${Math.ceil(retryAfter / 60)} minutes` : `${retryAfter || 1} seconds`;
+      throw new Error(`We have received many enquiries from this connection. Please try again in ${waitText}.`);
+    }
+    throw new Error(result.error || 'We could not send your enquiry.');
+  }
   return result;
 }
 
@@ -148,9 +155,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const payload = { name: guestName, email: form.get('email'), destination: form.get('destination'), travellers: form.get('travellers'), message: form.get('message') };
     const submitButton = event.currentTarget.querySelector('button[type="submit"]');
     submitButton.disabled = true; submitButton.innerHTML = 'Sending enquiry <span>…</span>';
-    sendInquiry(payload).then(() => {
+    sendInquiry(payload).then(result => {
       recordInquiryAttempt(rateCheck.state);
-      data.bookings.unshift({ id: `b${Date.now()}`, name: guestName, email: payload.email, destination: payload.destination, travellers: payload.travellers, date: 'Just now', status: 'new', initials: guestName.split(/\s+/).map(part => part[0]).join('').slice(0, 2).toUpperCase() });
+      const remoteInquiry = result.inquiry || {};
+      data.bookings.unshift({ id: remoteInquiry.id || `b${Date.now()}`, name: guestName, email: payload.email, destination: payload.destination, travellers: payload.travellers, message: payload.message, date: 'Just now', status: 'new', initials: guestName.split(/\s+/).map(part => part[0]).join('').slice(0, 2).toUpperCase() });
       saveData(data); event.currentTarget.reset(); formSuccess.textContent = 'Thanks — your enquiry is on its way. Our travel designer will be in touch shortly.'; formSuccess.classList.remove('form-error'); formSuccess.hidden = false;
     }).catch(error => { formSuccess.textContent = error.message; formSuccess.classList.add('form-error'); formSuccess.hidden = false; }).finally(() => { submitButton.disabled = false; submitButton.innerHTML = 'Start a conversation <span>↗</span>'; });
   });

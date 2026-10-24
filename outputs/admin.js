@@ -14,6 +14,7 @@ const ADMIN_DEFAULTS = {
 };
 function deepClone(value){return JSON.parse(JSON.stringify(value))} function readAdminData(){try{const stored=JSON.parse(localStorage.getItem(ADMIN_STORAGE_KEY));if(!stored)return deepClone(ADMIN_DEFAULTS);return {...deepClone(ADMIN_DEFAULTS),...stored,settings:{...deepClone(ADMIN_DEFAULTS.settings),...(stored.settings||{})}}}catch{return deepClone(ADMIN_DEFAULTS)}} function saveAdminData(){localStorage.setItem(ADMIN_STORAGE_KEY,JSON.stringify(adminData))} function e(value=''){return String(value).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
 let adminData=readAdminData(); let currentPage='dashboard'; let bookingFilter='all'; let editingPackageId=null; let editingTestimonialId=null;
+async function syncRemoteBookings(){try{const response=await fetch('/api/inquiry',{headers:{'x-admin-key':'tinyhues'}});if(!response.ok)return;const result=await response.json();const remote=Array.isArray(result.items)?result.items:[];const known=new Set(adminData.bookings.map(item=>item.id));const fresh=remote.filter(item=>item.id&&!known.has(item.id));if(fresh.length){adminData.bookings=[...fresh,...adminData.bookings];saveAdminData();toast(`${fresh.length} new enquiry${fresh.length===1?'':'ies'} synced`);}}catch(error){console.warn('Enquiry sync unavailable',error)}}
 
 function statusBadge(status){const labels={live:'Live',draft:'Draft',new:'New', 'in-progress':'In progress',booked:'Booked',closed:'Closed'};const cls=status==='in-progress'?'progress':status;return `<span class="status-badge status-${cls}">${labels[status]||status}</span>`}
 function toast(message){const el=document.getElementById('adminToast');document.getElementById('toastText').textContent=message;el.hidden=false;clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>{el.hidden=true},2600)}
@@ -32,8 +33,9 @@ function resetDemo(){if(!confirm('Reset all demo content to the original example
 
 document.addEventListener('DOMContentLoaded',()=>{
   const loginScreen=document.getElementById('loginScreen'), app=document.getElementById('adminApp');
-  document.getElementById('loginForm').addEventListener('submit',event=>{event.preventDefault();if(document.getElementById('adminUsername').value==='admin'&&document.getElementById('adminPassword').value==='tinyhues'){sessionStorage.setItem('tinyHuesAdminAuth','true');loginScreen.hidden=true;app.hidden=false;navigate('dashboard')}else document.getElementById('loginError').hidden=false});
-  if(sessionStorage.getItem('tinyHuesAdminAuth')==='true'){loginScreen.hidden=true;app.hidden=false;navigate('dashboard')}
+  const openAdmin=()=>{loginScreen.hidden=true;app.hidden=false;navigate('dashboard');syncRemoteBookings().then(()=>navigate(currentPage))};
+  document.getElementById('loginForm').addEventListener('submit',event=>{event.preventDefault();if(document.getElementById('adminUsername').value==='admin'&&document.getElementById('adminPassword').value==='tinyhues'){sessionStorage.setItem('tinyHuesAdminAuth','true');openAdmin()}else document.getElementById('loginError').hidden=false});
+  if(sessionStorage.getItem('tinyHuesAdminAuth')==='true')openAdmin()
   document.querySelectorAll('.admin-nav-item').forEach(item=>item.addEventListener('click',()=>navigate(item.dataset.page)));
   document.querySelectorAll('[data-page-jump]').forEach(item=>item.addEventListener('click',()=>navigate(item.dataset.pageJump)));
   document.getElementById('sidebarToggle').addEventListener('click',()=>document.querySelector('.admin-sidebar').classList.toggle('open'));
