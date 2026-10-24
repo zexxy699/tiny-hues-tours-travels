@@ -109,7 +109,7 @@ function renderPackages() {
   if (!grid) return;
   const query = (document.getElementById('packageSearch')?.value || '').toLowerCase().trim();
   const visible = data.packages.filter(item => item.status !== 'draft' && (activeFilter === 'all' || item.category === activeFilter) && `${item.title} ${item.location} ${item.category}`.toLowerCase().includes(query));
-  grid.innerHTML = visible.map(item => `<article class="package-card"><div class="package-card-image" style="background-image:url('${escapeHtml(item.image)}')"><span class="package-tag">${escapeHtml(item.tag)}</span><button class="package-card-arrow" data-package-id="${escapeHtml(item.id)}" aria-label="View ${escapeHtml(item.title)}">↗</button></div><div class="package-info"><span class="location">${escapeHtml(item.location)}</span><h3>${escapeHtml(item.title)}</h3><div class="package-bottom"><span class="package-duration">${escapeHtml(item.duration)}</span><strong class="package-price">From ${escapeHtml(item.price)}</strong></div></div></article>`).join('');
+  grid.innerHTML = visible.map(item => `<article class="package-card"><div class="package-card-image" style="background-image:url('${escapeHtml(item.image)}')"><span class="package-tag">${escapeHtml(item.tag)}</span><button class="package-card-arrow" data-package-id="${escapeHtml(item.id)}" aria-label="View ${escapeHtml(item.title)}"><span class="icon icon-arrow" aria-hidden="true"></span></button></div><div class="package-info"><span class="location">${escapeHtml(item.location)}</span><h3>${escapeHtml(item.title)}</h3><div class="package-bottom"><span class="package-duration">${escapeHtml(item.duration)}</span><strong class="package-price">From ${escapeHtml(item.price)}</strong></div></div></article>`).join('');
   const empty = document.getElementById('emptyPackages');
   if (empty) empty.hidden = visible.length > 0;
 }
@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const remoteInquiry = result.inquiry || {};
       data.bookings.unshift({ id: remoteInquiry.id || `b${Date.now()}`, name: guestName, email: payload.email, destination: payload.destination, travellers: payload.travellers, message: payload.message, date: 'Just now', status: 'new', initials: guestName.split(/\s+/).map(part => part[0]).join('').slice(0, 2).toUpperCase() });
       saveData(data); event.currentTarget.reset(); formSuccess.textContent = 'Thanks — your enquiry is on its way. Our travel designer will be in touch shortly.'; formSuccess.classList.remove('form-error'); formSuccess.hidden = false;
-    }).catch(error => { formSuccess.textContent = error.message; formSuccess.classList.add('form-error'); formSuccess.hidden = false; }).finally(() => { submitButton.disabled = false; submitButton.innerHTML = 'Start a conversation <span>↗</span>'; });
+    }).catch(error => { formSuccess.textContent = error.message; formSuccess.classList.add('form-error'); formSuccess.hidden = false; }).finally(() => { submitButton.disabled = false; submitButton.innerHTML = 'Start a conversation <span class="icon icon-arrow" aria-hidden="true"></span>'; });
   });
   document.getElementById('footerYear').textContent = new Date().getFullYear();
 });
