@@ -1,6 +1,12 @@
 {
   "rewrites": [
-    { "source": "/adminapage", "destination": "/admin.html" }
+    { "source": "/", "destination": "/outputs/index.html" },
+    { "source": "/styles.css", "destination": "/outputs/styles.css" },
+    { "source": "/app.js", "destination": "/outputs/app.js" },
+    { "source": "/admin.js", "destination": "/outputs/admin.js" },
+    { "source": "/adminapage", "destination": "/outputs/admin.html" },
+    { "source": "/adminapage/", "destination": "/outputs/admin.html" },
+    { "source": "/assets/:path*", "destination": "/outputs/assets/:path*" }
   ],
   "headers": [
     {
