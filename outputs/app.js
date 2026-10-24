@@ -147,19 +147,20 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.main-nav a').forEach(link => link.addEventListener('click', () => document.querySelector('.main-nav')?.classList.remove('open')));
   document.getElementById('inquiryForm')?.addEventListener('submit', event => {
     event.preventDefault();
-    const form = new FormData(event.currentTarget);
+    const inquiryForm = event.currentTarget;
+    const form = new FormData(inquiryForm);
     const guestName = form.get('name');
     const formSuccess = document.getElementById('formSuccess');
     const rateCheck = canSubmitInquiry();
     if (!rateCheck.allowed) { formSuccess.hidden = false; formSuccess.textContent = rateCheck.message; formSuccess.classList.add('form-error'); return; }
     const payload = { name: guestName, email: form.get('email'), destination: form.get('destination'), travellers: form.get('travellers'), message: form.get('message') };
-    const submitButton = event.currentTarget.querySelector('button[type="submit"]');
+    const submitButton = inquiryForm.querySelector('button[type="submit"]');
     submitButton.disabled = true; submitButton.innerHTML = 'Sending enquiry <span>…</span>';
     sendInquiry(payload).then(result => {
       recordInquiryAttempt(rateCheck.state);
       const remoteInquiry = result.inquiry || {};
       data.bookings.unshift({ id: remoteInquiry.id || `b${Date.now()}`, name: guestName, email: payload.email, destination: payload.destination, travellers: payload.travellers, message: payload.message, date: 'Just now', status: 'new', initials: guestName.split(/\s+/).map(part => part[0]).join('').slice(0, 2).toUpperCase() });
-      saveData(data); event.currentTarget.reset(); formSuccess.textContent = 'Thanks — your enquiry is on its way. Our travel designer will be in touch shortly.'; formSuccess.classList.remove('form-error'); formSuccess.hidden = false;
+      saveData(data); inquiryForm.reset(); formSuccess.textContent = 'Thanks — your enquiry is on its way. Our travel designer will be in touch shortly.'; formSuccess.classList.remove('form-error'); formSuccess.hidden = false;
     }).catch(error => { formSuccess.textContent = error.message; formSuccess.classList.add('form-error'); formSuccess.hidden = false; }).finally(() => { submitButton.disabled = false; submitButton.innerHTML = 'Start a conversation <span class="icon icon-arrow" aria-hidden="true"></span>'; });
   });
   document.getElementById('footerYear').textContent = new Date().getFullYear();
