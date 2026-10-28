@@ -232,6 +232,9 @@ body.cookie-banner-open .whatsapp-float{display:none}
 @media(max-width:720px){
   html{scroll-padding-top:76px}
   .container{width:calc(100% - 32px)}
+  body:not(.admin-page) .announcement{min-height:34px;gap:6px;padding:0 8px;font-size:8px;font-weight:600;letter-spacing:.035em;flex-wrap:nowrap}
+  body:not(.admin-page) .announcement>span:nth-child(2){white-space:nowrap}
+  body:not(.admin-page) .announcement a{margin-left:0;font-size:8px;white-space:nowrap;flex-shrink:0}
   body:not(.admin-page) .section{padding:72px 0}
   body:not(.admin-page) .split-heading{display:block;margin-bottom:28px}
   body:not(.admin-page) .heading-side{max-width:none;padding:17px 0 0}
@@ -286,6 +289,7 @@ body.cookie-banner-open .whatsapp-float{display:none}
 }
 
 @media(max-width:360px){
+  body:not(.admin-page) .announcement a{display:none}
   body:not(.admin-page) .container{width:calc(100% - 28px)}
   body:not(.admin-page) .destination-grid{gap:9px}
   body:not(.admin-page) .destination-card h3{font-size:19px}
