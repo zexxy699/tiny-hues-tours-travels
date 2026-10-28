@@ -14,3 +14,5 @@ The admin experience is intentionally lightweight for this demo. Changes to jour
 The enquiry form uses a client-side limit of 10 submissions per hour plus a Vercel `/api/inquiry` endpoint with a 20-per-hour per-instance limit and input validation. For a production launch, connect the endpoint to Vercel Firewall and a durable store such as Upstash or Vercel Postgres.
 
 Social links are editable in Admin → Site settings. The default Instagram and Facebook buttons open branded public search pages because no verified official social profile URLs were discoverable online; replace them with the company’s exact handles when available.
+
+The public launch flow now includes a floating WhatsApp shortcut, a Kashmir/Dal Lake hero image, cookie consent, executive leadership content, full-card journey opening, and WhatsApp trip handoff links that prefill the selected journey details for the owner. Primary WhatsApp/helpline: `+91 6005577032`; operations desk: `+91 6006473963`. These details and leadership bios are editable in Admin → Site settings.

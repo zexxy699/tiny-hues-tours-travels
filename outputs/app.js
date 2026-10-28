@@ -1,12 +1,17 @@
 const STORAGE_KEY = 'tinyHuesDemoData';
+const KASHMIR_HERO_IMAGE = 'https://images.unsplash.com/photo-1695667937079-b59c63660cfc?auto=format&fit=crop&w=2000&q=90';
+const OLD_HERO_IMAGE = 'https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=2000&q=90';
+const OLD_WHATSAPP = 'https://wa.me/918929175340';
+const COOKIE_CONSENT_KEY = 'tinyHuesCookieConsent';
 
 const defaultData = {
   settings: {
     brandName: 'Tiny Hues Tours & Travels',
     tagline: 'Curated Kashmir journeys',
-    phone: '+91 89291 75340',
+    phone: '+91 6005577032',
+    operationsPhone: '+91 6006473963',
     email: 'infotinyhuestourandtravels316@gmail.com',
-    whatsapp: 'https://wa.me/918929175340',
+    whatsapp: 'https://wa.me/916005577032',
     instagram: 'https://www.instagram.com/explore/search/keyword/?q=Tiny%20Hues%20Tours%20and%20Travels',
     facebook: 'https://www.facebook.com/public/Tiny-Hues-Tours-and-Travels',
     address: 'Srinagar, Jammu & Kashmir',
@@ -14,7 +19,13 @@ const defaultData = {
     heroEyebrow: 'Kashmir, thoughtfully arranged',
     heroTitle: 'Go where the quiet lives.',
     heroSubtitle: 'Journeys through Kashmir made personal — from the first cup of kahwa to the last mountain view.',
-    heroImage: 'https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=2000&q=90'
+    heroImage: KASHMIR_HERO_IMAGE,
+    leaderOneName: 'Aqib Ajaz',
+    leaderOneTitle: 'Chief Executive Officer',
+    leaderOneBio: 'Spearheading the strategic vision and luxury partnerships at Tiny Hues. Aqib ensures every guest experiences the authentic warmth and majestic charm of Kashmir with ultra-premium comfort.',
+    leaderTwoName: 'Umaiq Aijaz',
+    leaderTwoTitle: 'Managing Director',
+    leaderTwoBio: "Directing corporate growth, client relations, and bespoke itinerary standards. Umaiq ensures that Tiny Hues maintains its status as Kashmir's premier trusted travel brand."
   },
   packages: [
     { id: 'p1', title: 'Kashmir, in full colour', location: 'Srinagar · Gulmarg · Pahalgam', duration: '5 nights · 6 days', price: '₹18,999', category: 'valley', tag: 'Signature', description: 'A gentle first taste of Kashmir: floating breakfasts, meadows in bloom and unhurried days between Srinagar, Gulmarg and Pahalgam.', image: 'https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=900&q=85', featured: true, status: 'live' },
@@ -41,7 +52,11 @@ function getData() {
   try {
     const stored = JSON.parse(localStorage.getItem(STORAGE_KEY));
     if (!stored) return clone(defaultData);
-    return { ...clone(defaultData), ...stored, settings: { ...clone(defaultData.settings), ...(stored.settings || {}) } };
+    const merged = { ...clone(defaultData), ...stored, settings: { ...clone(defaultData.settings), ...(stored.settings || {}) } };
+    if (merged.settings.phone === '+91 89291 75340') merged.settings.phone = defaultData.settings.phone;
+    if (merged.settings.whatsapp === OLD_WHATSAPP) merged.settings.whatsapp = defaultData.settings.whatsapp;
+    if (merged.settings.heroImage === OLD_HERO_IMAGE) merged.settings.heroImage = KASHMIR_HERO_IMAGE;
+    return merged;
   } catch { return clone(defaultData); }
 }
 function saveData(data) { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
@@ -66,14 +81,30 @@ function renderSiteSettings() {
   ['heroEyebrow','heroSubtitle'].forEach(key => { const node = document.getElementById(key); if (node) node.textContent = s[key]; });
   const phone = document.getElementById('footerPhone');
   if (phone) { phone.textContent = s.phone; phone.href = `tel:${s.phone.replace(/\s/g, '')}`; }
+  const deskPhone = document.getElementById('footerDeskPhone');
+  if (deskPhone) { deskPhone.textContent = s.operationsPhone; deskPhone.href = `tel:${s.operationsPhone.replace(/\s/g, '')}`; }
+  const directPhone = document.getElementById('directPhone');
+  if (directPhone) { directPhone.textContent = s.phone; directPhone.href = `tel:${s.phone.replace(/\s/g, '')}`; }
   const email = document.getElementById('footerEmail');
   if (email) { email.textContent = s.email; email.href = `mailto:${s.email}`; }
   const whatsapp = document.getElementById('directWhatsapp');
   if (whatsapp) whatsapp.href = s.whatsapp;
+  const floatingWhatsapp = document.getElementById('floatingWhatsapp');
+  if (floatingWhatsapp) floatingWhatsapp.href = s.whatsapp;
   const instagram = document.getElementById('footerInstagram');
   if (instagram && s.instagram) instagram.href = s.instagram;
   const facebook = document.getElementById('footerFacebook');
   if (facebook && s.facebook) facebook.href = s.facebook;
+}
+
+function renderLeadership() {
+  const target = document.getElementById('leadershipGrid');
+  if (!target) return;
+  const leaders = [
+    { initials: 'AA', name: data.settings.leaderOneName, title: data.settings.leaderOneTitle, bio: data.settings.leaderOneBio },
+    { initials: 'UA', name: data.settings.leaderTwoName, title: data.settings.leaderTwoTitle, bio: data.settings.leaderTwoBio }
+  ];
+  target.innerHTML = leaders.map(leader => `<article class="leader-card"><div class="leader-avatar">${escapeHtml(leader.initials)}</div><div><span class="leader-kicker">EXECUTIVE LEADERSHIP</span><h3>${escapeHtml(leader.name)}</h3><strong>${escapeHtml(leader.title)}</strong><p>${escapeHtml(leader.bio)}</p></div></article>`).join('');
 }
 
 const inquiryRateLimit = { key: 'tinyHuesInquiryRateV2', max: 10, windowMs: 60 * 60 * 1000, cooldownMs: 5 * 1000 };
@@ -109,7 +140,7 @@ function renderPackages() {
   if (!grid) return;
   const query = (document.getElementById('packageSearch')?.value || '').toLowerCase().trim();
   const visible = data.packages.filter(item => item.status !== 'draft' && (activeFilter === 'all' || item.category === activeFilter) && `${item.title} ${item.location} ${item.category}`.toLowerCase().includes(query));
-  grid.innerHTML = visible.map(item => `<article class="package-card"><div class="package-card-image" style="background-image:url('${escapeHtml(item.image)}')"><span class="package-tag">${escapeHtml(item.tag)}</span><button class="package-card-arrow" data-package-id="${escapeHtml(item.id)}" aria-label="View ${escapeHtml(item.title)}"><span class="icon icon-arrow" aria-hidden="true"></span></button></div><div class="package-info"><span class="location">${escapeHtml(item.location)}</span><h3>${escapeHtml(item.title)}</h3><div class="package-bottom"><span class="package-duration">${escapeHtml(item.duration)}</span><strong class="package-price">From ${escapeHtml(item.price)}</strong></div></div></article>`).join('');
+  grid.innerHTML = visible.map(item => `<article class="package-card" data-package-id="${escapeHtml(item.id)}" tabindex="0" role="button" aria-label="View ${escapeHtml(item.title)}"><div class="package-card-image" style="background-image:url('${escapeHtml(item.image)}')"><span class="package-tag">${escapeHtml(item.tag)}</span><button class="package-card-arrow" data-package-id="${escapeHtml(item.id)}" aria-label="View ${escapeHtml(item.title)}"><span class="icon icon-arrow" aria-hidden="true"></span></button></div><div class="package-info"><span class="location">${escapeHtml(item.location)}</span><h3>${escapeHtml(item.title)}</h3><div class="package-bottom"><span class="package-duration">${escapeHtml(item.duration)}</span><strong class="package-price">From ${escapeHtml(item.price)}</strong></div></div></article>`).join('');
   const empty = document.getElementById('emptyPackages');
   if (empty) empty.hidden = visible.length > 0;
 }
@@ -122,10 +153,23 @@ function openPackageModal(id) {
   document.getElementById('modalTitle').textContent = item.title;
   document.getElementById('modalMeta').textContent = `${item.location} · ${item.duration} · from ${item.price}`;
   document.getElementById('modalDescription').textContent = item.description;
+  const whatsapp = document.getElementById('packageWhatsapp');
+  if (whatsapp) {
+    const message = `Hi Tiny Hues, I would like to make this my trip:\n\n${item.title}\n${item.location}\n${item.duration}\nStarting price: ${item.price}\n\nPlease share availability and next steps.`;
+    whatsapp.href = `${data.settings.whatsapp}${data.settings.whatsapp.includes('?') ? '&' : '?'}text=${encodeURIComponent(message)}`;
+  }
   document.getElementById('packageModal').hidden = false;
   document.body.classList.add('modal-open');
 }
 function closeModal() { document.getElementById('packageModal').hidden = true; document.body.classList.remove('modal-open'); }
+
+function initCookieConsent() {
+  const banner = document.getElementById('cookieConsent');
+  if (!banner || localStorage.getItem(COOKIE_CONSENT_KEY)) return;
+  banner.hidden = false;
+  document.getElementById('cookieAccept')?.addEventListener('click', () => { localStorage.setItem(COOKIE_CONSENT_KEY, 'accepted'); banner.hidden = true; });
+  document.getElementById('cookieDismiss')?.addEventListener('click', () => { localStorage.setItem(COOKIE_CONSENT_KEY, 'dismissed'); banner.hidden = true; });
+}
 
 function renderTestimonial() {
   const target = document.getElementById('testimonialContent');
@@ -135,10 +179,11 @@ function renderTestimonial() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  renderSiteSettings(); renderPackages(); renderTestimonial();
+  renderSiteSettings(); renderPackages(); renderTestimonial(); renderLeadership(); initCookieConsent();
   document.querySelectorAll('.filter-tab').forEach(button => button.addEventListener('click', () => { document.querySelectorAll('.filter-tab').forEach(item => item.classList.remove('active')); button.classList.add('active'); activeFilter = button.dataset.filter; renderPackages(); }));
   document.getElementById('packageSearch')?.addEventListener('input', renderPackages);
-  document.getElementById('packageGrid')?.addEventListener('click', event => { const button = event.target.closest('[data-package-id]'); if (button) openPackageModal(button.dataset.packageId); });
+  document.getElementById('packageGrid')?.addEventListener('click', event => { const card = event.target.closest('[data-package-id]'); if (card) openPackageModal(card.dataset.packageId); });
+  document.getElementById('packageGrid')?.addEventListener('keydown', event => { const card = event.target.closest('.package-card'); if (card && (event.key === 'Enter' || event.key === ' ')) { event.preventDefault(); openPackageModal(card.dataset.packageId); } });
   document.querySelectorAll('[data-close-modal]').forEach(button => button.addEventListener('click', closeModal));
   document.getElementById('packageModal')?.addEventListener('click', event => { if (event.target.id === 'packageModal') closeModal(); });
   document.getElementById('prevTestimonial')?.addEventListener('click', () => { testimonialIndex = (testimonialIndex - 1 + data.testimonials.length) % data.testimonials.length; renderTestimonial(); });
