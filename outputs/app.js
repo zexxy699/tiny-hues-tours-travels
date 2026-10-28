@@ -1,5 +1,6 @@
 const STORAGE_KEY = 'tinyHuesDemoData';
 const KASHMIR_HERO_IMAGE = 'https://images.unsplash.com/photo-1695667937079-b59c63660cfc?auto=format&fit=crop&w=2000&q=90';
+const KASHMIR_CARD_IMAGE = 'https://images.unsplash.com/photo-1695667937079-b59c63660cfc?auto=format&fit=crop&w=900&q=85';
 const OLD_HERO_IMAGE = 'https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=2000&q=90';
 const OLD_WHATSAPP = 'https://wa.me/918929175340';
 const COOKIE_CONSENT_KEY = 'tinyHuesCookieConsent';
@@ -28,7 +29,7 @@ const defaultData = {
     leaderTwoBio: "Directing corporate growth, client relations, and bespoke itinerary standards. Umaiq ensures that Tiny Hues maintains its status as Kashmir's premier trusted travel brand."
   },
   packages: [
-    { id: 'p1', title: 'Kashmir, in full colour', location: 'Srinagar · Gulmarg · Pahalgam', duration: '5 nights · 6 days', price: '₹18,999', category: 'valley', tag: 'Signature', description: 'A gentle first taste of Kashmir: floating breakfasts, meadows in bloom and unhurried days between Srinagar, Gulmarg and Pahalgam.', image: 'https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=900&q=85', featured: true, status: 'live' },
+    { id: 'p1', title: 'Kashmir, in full colour', location: 'Srinagar · Gulmarg · Pahalgam', duration: '5 nights · 6 days', price: '₹18,999', category: 'valley', tag: 'Signature', description: 'A gentle first taste of Kashmir: floating breakfasts, meadows in bloom and unhurried days between Srinagar, Gulmarg and Pahalgam.', image: KASHMIR_CARD_IMAGE, featured: true, status: 'live' },
     { id: 'p2', title: 'The high road', location: 'Srinagar · Kargil · Leh', duration: '10 nights · 11 days', price: '₹42,500', category: 'mountains', tag: 'Adventure', description: 'Take the long way over the Himalayas with dramatic passes, quiet monasteries and the unforgettable blue of Pangong Lake.', image: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=900&q=85', featured: true, status: 'live' },
     { id: 'p3', title: 'A softer kind of north', location: 'Srinagar · Sonamarg · Doodhpathri', duration: '4 nights · 5 days', price: '₹15,500', category: 'valley', tag: 'Slow escape', description: 'For travellers who want less road and more room to breathe, with meadows, forest walks and long evenings by the lake.', image: 'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=900&q=85', featured: true, status: 'live' },
     { id: 'p4', title: 'The soulful circuit', location: 'Jammu · Katra · Srinagar', duration: '9 nights · 10 days', price: '₹27,800', category: 'spiritual', tag: 'Meaningful', description: 'A considered journey from Vaishno Devi to the valley, balancing sacred places, local food and quiet moments of reflection.', image: 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=900&q=85', featured: false, status: 'live' },
@@ -56,6 +57,8 @@ function getData() {
     if (merged.settings.phone === '+91 89291 75340') merged.settings.phone = defaultData.settings.phone;
     if (merged.settings.whatsapp === OLD_WHATSAPP) merged.settings.whatsapp = defaultData.settings.whatsapp;
     if (merged.settings.heroImage === OLD_HERO_IMAGE) merged.settings.heroImage = KASHMIR_HERO_IMAGE;
+    const firstJourney = merged.packages?.find(item => item.id === 'p1');
+    if (firstJourney?.image === 'https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=900&q=85') firstJourney.image = KASHMIR_CARD_IMAGE;
     return merged;
   } catch { return clone(defaultData); }
 }
@@ -140,7 +143,7 @@ function renderPackages() {
   if (!grid) return;
   const query = (document.getElementById('packageSearch')?.value || '').toLowerCase().trim();
   const visible = data.packages.filter(item => item.status !== 'draft' && (activeFilter === 'all' || item.category === activeFilter) && `${item.title} ${item.location} ${item.category}`.toLowerCase().includes(query));
-  grid.innerHTML = visible.map(item => `<article class="package-card" data-package-id="${escapeHtml(item.id)}" tabindex="0" role="button" aria-label="View ${escapeHtml(item.title)}"><div class="package-card-image" style="background-image:url('${escapeHtml(item.image)}')"><span class="package-tag">${escapeHtml(item.tag)}</span><button class="package-card-arrow" data-package-id="${escapeHtml(item.id)}" aria-label="View ${escapeHtml(item.title)}"><span class="icon icon-arrow" aria-hidden="true"></span></button></div><div class="package-info"><span class="location">${escapeHtml(item.location)}</span><h3>${escapeHtml(item.title)}</h3><div class="package-bottom"><span class="package-duration">${escapeHtml(item.duration)}</span><strong class="package-price">From ${escapeHtml(item.price)}</strong></div></div></article>`).join('');
+  grid.innerHTML = visible.map(item => `<article class="package-card" data-package-id="${escapeHtml(item.id)}" tabindex="0"><div class="package-card-image" style="background-image:url('${escapeHtml(item.image)}')"><span class="package-tag">${escapeHtml(item.tag)}</span><button class="package-card-arrow" data-package-id="${escapeHtml(item.id)}" aria-label="View ${escapeHtml(item.title)}"><span class="icon icon-arrow" aria-hidden="true"></span></button></div><div class="package-info"><span class="location">${escapeHtml(item.location)}</span><h3>${escapeHtml(item.title)}</h3><div class="package-bottom"><span class="package-duration">${escapeHtml(item.duration)}</span><strong class="package-price">From ${escapeHtml(item.price)}</strong></div></div></article>`).join('');
   const empty = document.getElementById('emptyPackages');
   if (empty) empty.hidden = visible.length > 0;
 }
