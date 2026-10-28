@@ -1,6 +1,6 @@
 const STORAGE_KEY = 'tinyHuesDemoData';
-const KASHMIR_HERO_IMAGE = 'https://images.unsplash.com/photo-1695667937079-b59c63660cfc?auto=format&fit=crop&w=2000&q=90';
-const KASHMIR_CARD_IMAGE = 'https://images.unsplash.com/photo-1695667937079-b59c63660cfc?auto=format&fit=crop&w=900&q=85';
+const KASHMIR_HERO_IMAGE = 'https://images.unsplash.com/photo-1569852837213-00d97a707a83?auto=format&fit=crop&w=2000&q=90';
+const KASHMIR_CARD_IMAGE = 'https://images.unsplash.com/photo-1569852837213-00d97a707a83?auto=format&fit=crop&w=900&q=85';
 const OLD_HERO_IMAGE = 'https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=2000&q=90';
 const OLD_WHATSAPP = 'https://wa.me/918929175340';
 const COOKIE_CONSENT_KEY = 'tinyHuesCookieConsent';
@@ -58,7 +58,7 @@ function getData() {
     if (merged.settings.whatsapp === OLD_WHATSAPP) merged.settings.whatsapp = defaultData.settings.whatsapp;
     if (merged.settings.heroImage === OLD_HERO_IMAGE) merged.settings.heroImage = KASHMIR_HERO_IMAGE;
     const firstJourney = merged.packages?.find(item => item.id === 'p1');
-    if (firstJourney?.image === 'https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=900&q=85') firstJourney.image = KASHMIR_CARD_IMAGE;
+    if (firstJourney && (firstJourney.image === 'https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=900&q=85' || firstJourney.image === 'https://images.unsplash.com/photo-1695667937079-b59c63660cfc?auto=format&fit=crop&w=900&q=85')) firstJourney.image = KASHMIR_CARD_IMAGE;
     return merged;
   } catch { return clone(defaultData); }
 }
