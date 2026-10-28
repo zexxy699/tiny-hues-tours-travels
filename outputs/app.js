@@ -1,6 +1,7 @@
 const STORAGE_KEY = 'tinyHuesDemoData';
 const KASHMIR_HERO_IMAGE = 'https://images.unsplash.com/photo-1569852837213-00d97a707a83?auto=format&fit=crop&w=2000&q=90';
 const KASHMIR_CARD_IMAGE = 'https://images.unsplash.com/photo-1569852837213-00d97a707a83?auto=format&fit=crop&w=900&q=85';
+const HERO_IMAGE_VERSION = 'kashmir-cover-v4';
 const OLD_HERO_IMAGE = 'https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=2000&q=90';
 const OLD_WHATSAPP = 'https://wa.me/918929175340';
 const COOKIE_CONSENT_KEY = 'tinyHuesCookieConsent';
@@ -21,6 +22,7 @@ const defaultData = {
     heroTitle: 'Go where the quiet lives.',
     heroSubtitle: 'Journeys through Kashmir made personal — from the first cup of kahwa to the last mountain view.',
     heroImage: KASHMIR_HERO_IMAGE,
+    heroImageVersion: HERO_IMAGE_VERSION,
     leaderOneName: 'Aqib Ajaz',
     leaderOneTitle: 'Chief Executive Officer',
     leaderOneBio: 'Spearheading the strategic vision and luxury partnerships at Tiny Hues. Aqib ensures every guest experiences the authentic warmth and majestic charm of Kashmir with ultra-premium comfort.',
@@ -57,6 +59,7 @@ function getData() {
     if (merged.settings.phone === '+91 89291 75340') merged.settings.phone = defaultData.settings.phone;
     if (merged.settings.whatsapp === OLD_WHATSAPP) merged.settings.whatsapp = defaultData.settings.whatsapp;
     if (merged.settings.heroImage === OLD_HERO_IMAGE || merged.settings.heroImage === 'https://images.unsplash.com/photo-1695667937079-b59c63660cfc?auto=format&fit=crop&w=2000&q=90') merged.settings.heroImage = KASHMIR_HERO_IMAGE;
+    if (!merged.settings.heroImageVersion || merged.settings.heroImageVersion === 'legacy') { merged.settings.heroImage = KASHMIR_HERO_IMAGE; merged.settings.heroImageVersion = HERO_IMAGE_VERSION; }
     const firstJourney = merged.packages?.find(item => item.id === 'p1');
     if (firstJourney && (firstJourney.image === 'https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=900&q=85' || firstJourney.image === 'https://images.unsplash.com/photo-1695667937079-b59c63660cfc?auto=format&fit=crop&w=900&q=85')) firstJourney.image = KASHMIR_CARD_IMAGE;
     return merged;
