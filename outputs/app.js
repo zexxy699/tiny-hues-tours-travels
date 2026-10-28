@@ -165,9 +165,15 @@ function closeModal() { document.getElementById('packageModal').hidden = true; d
 function initCookieConsent() {
   const banner = document.getElementById('cookieConsent');
   if (!banner || localStorage.getItem(COOKIE_CONSENT_KEY)) return;
+  document.body.classList.add('cookie-banner-open');
   banner.hidden = false;
-  document.getElementById('cookieAccept')?.addEventListener('click', () => { localStorage.setItem(COOKIE_CONSENT_KEY, 'accepted'); banner.hidden = true; });
-  document.getElementById('cookieDismiss')?.addEventListener('click', () => { localStorage.setItem(COOKIE_CONSENT_KEY, 'dismissed'); banner.hidden = true; });
+  const closeBanner = (choice) => {
+    localStorage.setItem(COOKIE_CONSENT_KEY, choice);
+    banner.hidden = true;
+    document.body.classList.remove('cookie-banner-open');
+  };
+  document.getElementById('cookieAccept')?.addEventListener('click', () => closeBanner('accepted'));
+  document.getElementById('cookieDismiss')?.addEventListener('click', () => closeBanner('dismissed'));
 }
 
 function renderTestimonial() {
