@@ -95,6 +95,25 @@ body:not(.admin-page) .nav-cta:hover{background:#e1ae6e;color:var(--night)}
 .rail-heading h2{font-size:49px}
 .rail-heading h2 em{color:var(--accent-ink)}
 .destination-grid{gap:17px}
+
+/* Tiny Hues destination gallery, image credits and stronger brand mark */
+.brand-logo{width:66px;height:66px;padding:2px;border:1px solid #a7c5d1;border-radius:12px;background:linear-gradient(145deg,#f7fbfc,#e8f3f5);box-shadow:0 0 0 3px #fff,0 0 0 4px rgba(190,151,89,.65),0 8px 18px rgba(15,57,73,.14)}
+.brand-logo img{transform:scale(1.56);mix-blend-mode:multiply;filter:contrast(1.08) saturate(1.12)}
+.admin-sidebar .brand-logo{border-radius:12px;background:linear-gradient(145deg,#f7fbfc,#e8f3f5)}
+.brand-light .brand-logo{background:linear-gradient(145deg,#fff,#e8f3f5)}
+.destination-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:17px}
+.destination-card img{width:100%;height:100%;object-fit:cover}
+.package-modal{grid-template-columns:48% 52%;max-width:850px}
+.modal-gallery{min-width:0;display:flex;flex-direction:column;padding:20px 0 18px 20px;align-self:stretch}
+.modal-image{width:100%;height:330px;min-height:330px;background-size:cover;background-position:center;border-radius:7px}
+.modal-gallery-thumbs{display:flex;gap:8px;overflow-x:auto;padding:10px 1px 2px;scrollbar-width:thin}
+.gallery-thumb{width:58px;height:46px;flex:0 0 auto;background-size:cover;background-position:center;border:2px solid transparent;border-radius:4px;opacity:.72}
+.gallery-thumb.active,.gallery-thumb:focus-visible{border-color:#b48a4b;opacity:1;outline:none}
+.modal-photo-credit{padding:4px 2px 0;color:#697d87;font-size:9px;line-height:1.45}
+.modal-photo-credit a{text-decoration:underline;text-underline-offset:2px}
+.field-hint{display:block;color:#708392;font-size:11px;line-height:1.4;font-weight:400;margin:4px 0 7px}
+.admin-form input[type=file]{padding:10px;border:1px dashed #b7cbd2;background:#f7fafb}
+@media(max-width:720px){.brand-logo{width:52px;height:52px}.brand-logo img{transform:scale(1.5)}.destination-grid{grid-template-columns:1fr 1fr}.destination-card-tall{grid-row:auto}.modal-gallery{padding:14px 14px 0;min-height:0}.modal-image{height:240px;min-height:205px;max-height:32svh}.package-modal{grid-template-columns:1fr}.modal-gallery-thumbs{padding-top:8px}.modal-photo-credit{padding:3px 1px 0}.admin-form .field-hint{font-size:10px}}
 .destination-card{border-radius:12px;box-shadow:0 18px 38px rgba(15,57,73,.11)}
 .destination-card-tall{margin-top:-22px;margin-bottom:22px}
 .destination-card:after{background:linear-gradient(180deg,rgba(5,26,41,.02) 20%,rgba(5,25,42,.88) 100%)}

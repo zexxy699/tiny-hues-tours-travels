@@ -1,0 +1,69 @@
+{
+  "settings": {
+    "brandName": "Tiny Hues Tours & Travels",
+    "tagline": "Curated Kashmir journeys",
+    "phone": "+91 6006473963",
+    "operationsPhone": "+91 6005577032",
+    "email": "infotinyhuestourandtravels316@gmail.com",
+    "whatsapp": "https://wa.me/916006473963",
+    "contactVersion": "contacts-v2",
+    "instagram": "https://www.instagram.com/explore/search/keyword/?q=Tiny%20Hues%20Tours%20and%20Travels",
+    "facebook": "https://www.facebook.com/public/Tiny-Hues-Tours-and-Travels",
+    "address": "Srinagar, Jammu & Kashmir",
+    "hours": "Mon–Sat · 9:30 AM–6:30 PM",
+    "heroEyebrow": "Kashmir, thoughtfully arranged",
+    "heroTitle": "Go where the quiet lives.",
+    "heroSubtitle": "Journeys through Kashmir made personal — from the first cup of kahwa to the last mountain view.",
+    "heroImage": "https://images.unsplash.com/photo-1569852837213-00d97a707a83?auto=format&fit=crop&w=2000&q=90",
+    "heroImageVersion": "kashmir-cover-v4",
+    "leaderOneName": "Aqib Ajaz",
+    "leaderOneTitle": "Chief Executive Officer",
+    "leaderOneBio": "Spearheading the strategic vision and luxury partnerships at Tiny Hues. Aqib ensures every guest experiences the authentic warmth and majestic charm of Kashmir with ultra-premium comfort.",
+    "leaderTwoName": "Umaiq Aijaz",
+    "leaderTwoTitle": "Managing Director",
+    "leaderTwoBio": "Directing corporate growth, client relations, and bespoke itinerary standards. Umaiq ensures that Tiny Hues maintains its status as Kashmir's premier trusted travel brand."
+  },
+  "packages": [
+    {
+      "id": "p1", "title": "Kashmir, in full colour", "location": "Srinagar · Gulmarg · Pahalgam", "duration": "5 nights · 6 days", "price": "₹18,999", "category": "valley", "tag": "Signature", "description": "A gentle first taste of Kashmir: floating breakfasts, meadows in bloom and unhurried days between Srinagar, Gulmarg and Pahalgam.", "image": "https://images.unsplash.com/photo-1569852837213-00d97a707a83?auto=format&fit=crop&w=900&q=85", "images": ["https://images.unsplash.com/photo-1569852837213-00d97a707a83?auto=format&fit=crop&w=1200&q=85"], "featured": true, "status": "live", "showInDestinations": false
+    },
+    {
+      "id": "p2", "title": "The high road", "location": "Srinagar · Kargil · Leh", "duration": "10 nights · 11 days", "price": "₹42,500", "category": "mountains", "tag": "Adventure", "description": "Take the long way over the Himalayas with dramatic passes, quiet monasteries and the unforgettable blue of Pangong Lake.", "image": "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=900&q=85", "images": ["https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=85"], "featured": true, "status": "live", "showInDestinations": false
+    },
+    {
+      "id": "p3", "title": "A softer kind of north", "location": "Srinagar · Sonamarg · Doodhpathri", "duration": "4 nights · 5 days", "price": "₹15,500", "category": "valley", "tag": "Slow escape", "description": "For travellers who want less road and more room to breathe, with meadows, forest walks and long evenings by the lake.", "image": "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=900&q=85", "images": ["https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1200&q=85"], "featured": true, "status": "live", "showInDestinations": false
+    },
+    {
+      "id": "p4", "title": "The soulful circuit", "location": "Jammu · Katra · Srinagar", "duration": "9 nights · 10 days", "price": "₹27,800", "category": "spiritual", "tag": "Meaningful", "description": "A considered journey from Vaishno Devi to the valley, balancing sacred places, local food and quiet moments of reflection.", "image": "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=900&q=85", "images": ["https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=1200&q=85"], "featured": false, "status": "live", "showInDestinations": false
+    },
+    {
+      "id": "p5", "title": "Winter, warmly", "location": "Srinagar · Gulmarg", "duration": "4 nights · 5 days", "price": "₹22,900", "category": "mountains", "tag": "Seasonal", "description": "Snow underfoot, kahwa in hand. A cosy winter stay with a day on the slopes and the valley at its quietest.", "image": "https://images.unsplash.com/photo-1517299321609-52687d1bc55a?auto=format&fit=crop&w=900&q=85", "images": ["https://images.unsplash.com/photo-1517299321609-52687d1bc55a?auto=format&fit=crop&w=1200&q=85"], "featured": false, "status": "draft", "showInDestinations": false
+    },
+    {
+      "id": "p6", "title": "Build your own Kashmir", "location": "Anywhere in the valley", "duration": "Made around you", "price": "Custom", "category": "all", "tag": "Bespoke", "description": "Tell us how you like to travel and we will shape the route, stays and small surprises around you.", "image": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=85", "images": ["https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=85"], "featured": false, "status": "live", "showInDestinations": false
+    },
+    {
+      "id": "sonamarg", "title": "Sonamarg · Meadow of Gold", "location": "Sonamarg · Thajiwas · Sindh River", "duration": "2 nights · 3 days", "price": "₹19,999", "category": "mountains", "tag": "Alpine escape", "description": "Follow the Sindh River into wide mountain meadows, with time for the Thajiwas landscape, local stops and a slow evening beneath the peaks.", "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Sonamarg%2C%20jammu%20and%20kashmir.jpg?width=1200", "images": ["https://commons.wikimedia.org/wiki/Special:FilePath/Sonamarg%2C%20jammu%20and%20kashmir.jpg?width=1200"], "photoCredit": "Rayeesmaqboolkashmir · CC BY-SA 4.0", "photoCreditUrl": "https://commons.wikimedia.org/wiki/File:Sonamarg,_jammu_and_kashmir.jpg", "featured": true, "status": "live", "showInDestinations": true
+    },
+    {
+      "id": "gurez", "title": "Gurez · Beyond the Pass", "location": "Dawar · Habba Khatoon · Kishanganga", "duration": "3 nights · 4 days", "price": "₹19,999", "category": "mountains", "tag": "Off the map", "description": "A quieter northern journey through Gurez's riverside villages, open valley views and the striking profile of Habba Khatoon peak.", "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Gurez%20Valley%2003.jpg?width=1200", "images": ["https://commons.wikimedia.org/wiki/Special:FilePath/Gurez%20Valley%2003.jpg?width=1200"], "photoCredit": "Journo Mohsin · CC BY-SA 4.0", "photoCreditUrl": "https://commons.wikimedia.org/wiki/File:Gurez_Valley_03.jpg", "featured": true, "status": "live", "showInDestinations": true
+    },
+    {
+      "id": "daksum", "title": "Daksum · Under the Pines", "location": "Daksum · Bringi River · Anantnag", "duration": "2 nights · 3 days", "price": "₹19,999", "category": "valley", "tag": "Forest retreat", "description": "A forest-side escape shaped around the Bringi stream, wooded walks and an easy pace in the cool green hills of Daksum.", "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Stream%20at%20Daksum%20(14387677438).jpg?width=1200", "images": ["https://commons.wikimedia.org/wiki/Special:FilePath/Stream%20at%20Daksum%20(14387677438).jpg?width=1200"], "photoCredit": "Mike Prince · CC BY 2.0", "photoCreditUrl": "https://commons.wikimedia.org/wiki/File:Stream_at_Daksum_(14387677438).jpg", "featured": false, "status": "live", "showInDestinations": true
+    },
+    {
+      "id": "doodhpathri", "title": "Doodhpathri · Meadow Days", "location": "Doodhpathri · Shaliganga · Budgam", "duration": "2 nights · 3 days", "price": "₹19,999", "category": "valley", "tag": "Meadow escape", "description": "Spend unhurried time among open grasslands, winding meadow roads and pine-covered slopes in the Budgam highlands.", "image": "https://upload.wikimedia.org/wikipedia/commons/f/f2/Doodhpathri_-_A_dirt_road_goes_through_the_many_meadows_southwest_Jammu_Kashmir_India.jpg", "images": ["https://upload.wikimedia.org/wikipedia/commons/f/f2/Doodhpathri_-_A_dirt_road_goes_through_the_many_meadows_southwest_Jammu_Kashmir_India.jpg"], "photoCredit": "Ankur P · CC BY-SA 2.0", "photoCreditUrl": "https://commons.wikimedia.org/wiki/File:Doodhpathri_-_A_dirt_road_goes_through_the_many_meadows_southwest_Jammu_Kashmir_India.jpg", "featured": true, "status": "live", "showInDestinations": true
+    },
+    {
+      "id": "peer-ki-gali", "title": "Peer Ki Gali · The High Pass", "location": "Peer Ki Gali · Mughal Road · Pir Panjal", "duration": "2 nights · 3 days", "price": "₹19,999", "category": "mountains", "tag": "Mountain pass", "description": "Take the historic Mughal Road into the Pir Panjal highlands, with time for sweeping pass views and the mountain air at its own pace.", "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Peer_Ki_Gali_Mughal_Road_Poonch_Srinagar.jpg/1200px-Peer_Ki_Gali_Mughal_Road_Poonch_Srinagar.jpg", "images": ["https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Peer_Ki_Gali_Mughal_Road_Poonch_Srinagar.jpg/1200px-Peer_Ki_Gali_Mughal_Road_Poonch_Srinagar.jpg"], "photoCredit": "Naveenkar · Public domain", "photoCreditUrl": "https://commons.wikimedia.org/wiki/File:Peer_Ki_Gali_Mughal_Road_Poonch_Srinagar.jpg", "featured": false, "status": "live", "showInDestinations": true
+    },
+    {
+      "id": "bangus-valley", "title": "Bangus Valley · Wide Open", "location": "Bangus Valley · Kupwara", "duration": "3 nights · 4 days", "price": "₹19,999", "category": "mountains", "tag": "Open valley", "description": "A slower journey through Kupwara's broad alpine valley, with long meadow views, forest edges and room to let the landscape set the pace.", "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Full%20view%20of%20bangus%20the%20paradise.jpg?width=1200", "images": ["https://commons.wikimedia.org/wiki/Special:FilePath/Full%20view%20of%20bangus%20the%20paradise.jpg?width=1200"], "photoCredit": "Idrees Lone 05 · CC BY-SA 4.0", "photoCreditUrl": "https://commons.wikimedia.org/wiki/File:Full_view_of_bangus_the_paradise.jpg", "featured": true, "status": "live", "showInDestinations": true
+    }
+  ],
+  "testimonials": [
+    { "id": "t1", "quote": "The trip felt like it had been made just for us. No rushing, no guesswork — just beautiful days and kind people.", "name": "Mithun Das", "location": "Kolkata · Kashmir valley", "rating": 5 },
+    { "id": "t2", "quote": "Tiny Hues found the balance we were looking for: a little adventure, a lot of warmth and enough time to simply look around.", "name": "Mohammed Nabi", "location": "Delhi · Gulmarg & Pahalgam", "rating": 5 },
+    { "id": "t3", "quote": "Every detail was handled before we even had to ask. We came back with a softer pace and a camera roll full of magic.", "name": "Ananya Rao", "location": "Bengaluru · A soulful circuit", "rating": 5 }
+  ]
+}
