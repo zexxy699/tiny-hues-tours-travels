@@ -56,7 +56,7 @@ function getData() {
     const merged = { ...clone(defaultData), ...stored, settings: { ...clone(defaultData.settings), ...(stored.settings || {}) } };
     if (merged.settings.phone === '+91 89291 75340') merged.settings.phone = defaultData.settings.phone;
     if (merged.settings.whatsapp === OLD_WHATSAPP) merged.settings.whatsapp = defaultData.settings.whatsapp;
-    if (merged.settings.heroImage === OLD_HERO_IMAGE) merged.settings.heroImage = KASHMIR_HERO_IMAGE;
+    if (merged.settings.heroImage === OLD_HERO_IMAGE || merged.settings.heroImage === 'https://images.unsplash.com/photo-1695667937079-b59c63660cfc?auto=format&fit=crop&w=2000&q=90') merged.settings.heroImage = KASHMIR_HERO_IMAGE;
     const firstJourney = merged.packages?.find(item => item.id === 'p1');
     if (firstJourney && (firstJourney.image === 'https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=900&q=85' || firstJourney.image === 'https://images.unsplash.com/photo-1695667937079-b59c63660cfc?auto=format&fit=crop&w=900&q=85')) firstJourney.image = KASHMIR_CARD_IMAGE;
     return merged;
