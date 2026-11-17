@@ -1,36 +1,63 @@
-const { hasAdminSession } = require('../lib/auth');
-const { readSiteData, saveSiteData, readBody } = require('../lib/site-data');
+const { hasAdminSession, clientKey } = require('../lib/auth');
+const { readSiteData, updateSiteData, readBody } = require('../lib/site-data');
 
 const WINDOW_MS = 60 * 60 * 1000;
 const MAX_REQUESTS = 20;
+const MIN_FILL_MS = 2500;
+const MAX_INBOX = 500;
+const STATUSES = new Set(['new', 'in-progress', 'booked', 'closed']);
+// Best-effort per-instance limit; see README for adding a Vercel Firewall rule.
 const limiter = globalThis.__tinyHuesInquiryLimiterV3 || new Map();
 globalThis.__tinyHuesInquiryLimiterV3 = limiter;
 
-function clientKey(req) {
-  const forwarded = req.headers['x-forwarded-for'];
-  return (forwarded ? forwarded.split(',')[0] : req.socket?.remoteAddress || 'unknown').trim();
+async function handleAdmin(req, res) {
+  if (!hasAdminSession(req)) return res.status(401).json({ error: 'Unauthorized' });
+  if (req.method === 'GET') {
+    const content = await readSiteData();
+    return res.status(200).json({ items: content.bookings || [] });
+  }
+  const body = readBody(req);
+  const id = String(req.query?.id || body.id || '');
+  if (!id) return res.status(400).json({ error: 'Missing enquiry id.' });
+  if (req.method === 'DELETE') {
+    let found = false;
+    await updateSiteData(content => {
+      found = content.bookings.some(item => item.id === id);
+      content.bookings = content.bookings.filter(item => item.id !== id);
+      return content;
+    });
+    return res.status(found ? 200 : 404).json(found ? { ok: true } : { error: 'That enquiry no longer exists.' });
+  }
+  // PATCH: change status
+  const status = String(body.status || '');
+  if (!STATUSES.has(status)) return res.status(400).json({ error: 'Unknown status.' });
+  let updated = null;
+  await updateSiteData(content => {
+    content.bookings = content.bookings.map(item => item.id === id ? (updated = { ...item, status }) : item);
+    return content;
+  });
+  return updated ? res.status(200).json({ ok: true, item: updated }) : res.status(404).json({ error: 'That enquiry no longer exists.' });
 }
 
 module.exports = async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
   res.setHeader('X-Content-Type-Options', 'nosniff');
 
-  if (req.method === 'GET') {
-    if (!hasAdminSession(req)) return res.status(401).json({ error: 'Unauthorized' });
-    try {
-      const content = await readSiteData();
-      return res.status(200).json({ items: content.bookings || [] });
-    } catch (error) {
-      console.error('Enquiry load failed', error);
-      return res.status(503).json({ error: 'The enquiry inbox is temporarily unavailable.' });
+  if (['GET', 'DELETE', 'PATCH'].includes(req.method)) {
+    try { return await handleAdmin(req, res); }
+    catch (error) {
+      console.error('Enquiry admin action failed', error);
+      return res.status(503).json({ error: 'The enquiry inbox is temporarily unavailable. Please try again.' });
     }
   }
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   const body = readBody(req);
-  if (body.website) return res.status(200).json({ ok: true });
-
   const now = Date.now();
+  // Bots: the hidden honeypot field is filled, or the form was sent faster than a person could type it.
+  const startedAt = Number(body.startedAt);
+  if (body.website || (Number.isFinite(startedAt) && startedAt > 0 && now - startedAt < MIN_FILL_MS)) return res.status(200).json({ ok: true });
+
   const key = clientKey(req);
   const previous = limiter.get(key);
   const record = !previous || now - previous.startedAt >= WINDOW_MS ? { startedAt: now, count: 0 } : previous;
@@ -45,7 +72,7 @@ module.exports = async function handler(req, res) {
   const destination = String(body.destination || '').trim();
   const travellers = String(body.travellers || '').trim();
   const message = String(body.message || '').trim();
-  if (!name || !email || !destination || !/^\S+@\S+\.\S+$/.test(email)) {
+  if (!name || !email || !destination || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return res.status(400).json({ error: 'Please provide a valid name, email and destination.' });
   }
   if (name.length > 100 || email.length > 160 || destination.length > 120 || travellers.length > 40 || message.length > 2000) {
@@ -65,12 +92,13 @@ module.exports = async function handler(req, res) {
   };
 
   try {
-    const content = await readSiteData();
-    content.bookings = [inquiry, ...(content.bookings || [])].slice(0, 500);
-    await saveSiteData(content);
+    await updateSiteData(content => {
+      content.bookings = [inquiry, ...content.bookings].slice(0, MAX_INBOX);
+      return content;
+    });
     record.count += 1;
     limiter.set(key, record);
-    return res.status(200).json({ ok: true, message: 'Enquiry received', inquiry });
+    return res.status(200).json({ ok: true, message: 'Enquiry received' });
   } catch (error) {
     console.error('Enquiry save failed', error);
     return res.status(503).json({ error: 'We could not save your enquiry right now. Please try again shortly.' });

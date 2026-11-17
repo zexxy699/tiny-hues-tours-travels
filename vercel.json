@@ -1,13 +1,24 @@
 {
   "functions": {
     "api/**/*.js": {
-      "regions": ["bom1"]
+      "regions": ["bom1"],
+      "includeFiles": "outputs/index.html"
     }
   },
+  "redirects": [
+    { "source": "/index.html", "destination": "/", "permanent": true },
+    { "source": "/outputs/index.html", "destination": "/", "permanent": true },
+    { "source": "/outputs/admin.html", "destination": "/adminapage", "permanent": true },
+    { "source": "/journeys", "destination": "/#packages", "permanent": false },
+    { "source": "/journeys/:slug/", "destination": "/journeys/:slug", "permanent": true }
+  ],
   "rewrites": [
-    { "source": "/", "destination": "/outputs/index.html" },
+    { "source": "/", "destination": "/api/home" },
+    { "source": "/journeys/:slug", "destination": "/api/home?journey=:slug" },
+    { "source": "/sitemap.xml", "destination": "/api/sitemap" },
     { "source": "/styles.css", "destination": "/outputs/styles.css" },
     { "source": "/app.js", "destination": "/outputs/app.js" },
+    { "source": "/render.js", "destination": "/outputs/render.js" },
     { "source": "/admin.js", "destination": "/outputs/admin.js" },
     { "source": "/adminapage", "destination": "/outputs/admin.html" },
     { "source": "/adminapage/", "destination": "/outputs/admin.html" },
@@ -20,6 +31,14 @@
         { "key": "X-Content-Type-Options", "value": "nosniff" },
         { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
       ]
+    },
+    {
+      "source": "/adminapage(.*)",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+    },
+    {
+      "source": "/(outputs|data|lib)/(.*)",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }]
     }
   ]
 }

@@ -4,6 +4,8 @@ let bookingFilter = 'all';
 let editingPackageId = null;
 let editingTestimonialId = null;
 let saveQueue = Promise.resolve();
+const INCLUDE_OPTIONS = [['sightseeing','Sightseeing'],['meals','Meals'],['hotels','Hotels'],['transfer','Transfers'],['houseboat','Houseboat'],['guide','Local guide']];
+const slugify = value => String(value || '').normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/&/g, ' and ').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 80);
 
 const clone = value => JSON.parse(JSON.stringify(value));
 const e = (value = '') => String(value).replace(/[&<>\'"]/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' }[char]));
@@ -25,7 +27,8 @@ async function loadAdminData() {
 
 function saveAdminData() {
   const snapshot = JSON.stringify(adminData);
-  saveQueue = saveQueue.catch(() => {}).then(() => api('/api/content', { method: 'POST', body: JSON.stringify({ content: JSON.parse(snapshot) }) }));
+  const { settings, packages, testimonials } = JSON.parse(snapshot);
+  saveQueue = saveQueue.catch(() => {}).then(() => api('/api/content', { method: 'POST', body: JSON.stringify({ content: { settings, packages, testimonials } }) }));
   return saveQueue;
 }
 
@@ -101,10 +104,10 @@ function populateSettings() {
 function showAdminModal(type, id = null) {
   const content = document.getElementById('adminModalContent');
   if (type === 'package') {
-    const item = adminData.packages.find(entry => entry.id === id) || { title:'', tag:'New journey', location:'', duration:'', price:'₹19,999', category:'valley', description:'', image:'', images:[], photoCredit:'', photoCreditUrl:'', status:'draft', featured:false, showInDestinations:true };
+    const item = adminData.packages.find(entry => entry.id === id) || { title:'', tag:'New journey', location:'', duration:'', price:'₹19,999', category:'valley', description:'', image:'', images:[], photoCredit:'', photoCreditUrl:'', status:'draft', featured:false, showInDestinations:true, includes:['sightseeing','meals','hotels','transfer'], inclusions:[] };
     editingPackageId = id;
     const imageList = Array.isArray(item.images) && item.images.length ? item.images : (item.image ? [item.image] : []);
-    content.innerHTML = `<span class="kicker">JOURNEY EDITOR</span><h2>${id ? 'Edit journey' : 'Add a journey'}</h2><form class="admin-form" id="packageForm"><label>Journey name<input name="title" required value="${e(item.title)}"></label><label>Short label<input name="tag" value="${e(item.tag || '')}"></label><label class="span-2">Locations & route<input name="location" required value="${e(item.location)}"></label><label>Duration<input name="duration" required value="${e(item.duration)}"></label><label>Starting price<input name="price" required value="${e(item.price)}"></label><label>Collection<select name="category"><option value="valley" ${item.category === 'valley' ? 'selected' : ''}>Valley escapes</option><option value="mountains" ${item.category === 'mountains' ? 'selected' : ''}>High mountains</option><option value="spiritual" ${item.category === 'spiritual' ? 'selected' : ''}>Soulful trails</option><option value="all" ${item.category === 'all' ? 'selected' : ''}>Bespoke</option></select></label><label>Status<select name="status"><option value="live" ${item.status === 'live' ? 'selected' : ''}>Live on website</option><option value="draft" ${item.status === 'draft' ? 'selected' : ''}>Save as draft</option></select></label><label class="span-2">Description<textarea name="description" rows="4">${e(item.description)}</textarea></label><label class="span-2">Photos <small class="field-hint">Paste image URLs, one per line. The first one is the cover photo.</small><textarea name="images" rows="3" placeholder="https://…">${e(imageList.join('\n'))}</textarea></label><label class="span-2">Upload photos<input name="photoFiles" type="file" accept="image/jpeg,image/png,image/webp,image/avif" multiple><small class="field-hint">JPEG, PNG, WebP or AVIF · up to 3 MB each</small></label><label>Photo credit<input name="photoCredit" value="${e(item.photoCredit || '')}" placeholder="Photographer · license"></label><label>Photo credit source URL<input name="photoCreditUrl" type="url" value="${e(item.photoCreditUrl || '')}" placeholder="https://…"></label><label class="check-row"><input name="featured" type="checkbox" ${item.featured ? 'checked' : ''}> Feature this journey</label><label class="check-row"><input name="showInDestinations" type="checkbox" ${item.showInDestinations ? 'checked' : ''}> Show in Places section</label><div class="admin-form-actions"><button type="button" class="button button-ghost" data-close-admin-modal>Cancel</button><button type="submit" class="button button-dark" id="savePackageButton">Save journey <span>✓</span></button></div></form>`;
+    content.innerHTML = `<span class="kicker">JOURNEY EDITOR</span><h2>${id ? 'Edit journey' : 'Add a journey'}</h2><form class="admin-form" id="packageForm"><label>Journey name<input name="title" required value="${e(item.title)}"></label><label>Short label<input name="tag" value="${e(item.tag || '')}"></label><label class="span-2">Locations & route<input name="location" required value="${e(item.location)}"></label><label>Duration<input name="duration" required value="${e(item.duration)}"></label><label>Starting price<input name="price" required value="${e(item.price)}"></label><label>Collection<select name="category"><option value="valley" ${item.category === 'valley' ? 'selected' : ''}>Valley escapes</option><option value="mountains" ${item.category === 'mountains' ? 'selected' : ''}>High mountains</option><option value="spiritual" ${item.category === 'spiritual' ? 'selected' : ''}>Soulful trails</option><option value="all" ${item.category === 'all' ? 'selected' : ''}>Bespoke</option></select></label><label>Status<select name="status"><option value="live" ${item.status === 'live' ? 'selected' : ''}>Live on website</option><option value="draft" ${item.status === 'draft' ? 'selected' : ''}>Save as draft</option></select></label><label class="span-2">Description<textarea name="description" rows="4">${e(item.description)}</textarea></label><label class="span-2">Photos <small class="field-hint">Paste image URLs, one per line. The first one is the cover photo.</small><textarea name="images" rows="3" placeholder="https://…">${e(imageList.join('\n'))}</textarea></label><label class="span-2">Upload photos<input name="photoFiles" type="file" accept="image/jpeg,image/png,image/webp,image/avif" multiple><small class="field-hint">JPEG, PNG, WebP or AVIF · up to 3 MB each</small></label><fieldset class="span-2 include-picker"><legend>What's included <small class="field-hint">Shown as icons on the journey card and details.</small></legend>${INCLUDE_OPTIONS.map(([key, label]) => `<label class="check-row"><input type="checkbox" name="includes" value="${key}" ${(item.includes || []).includes(key) ? 'checked' : ''}> ${label}</label>`).join('')}</fieldset><label class="span-2">Package inclusions <small class="field-hint">One per line, e.g. “Stay in a deluxe hotel”.</small><textarea name="inclusions" rows="5" placeholder="Sightseeing in a private car&#10;Stay in a deluxe hotel&#10;One night on a Dal Lake houseboat">${e((item.inclusions || []).join('\n'))}</textarea></label><label>Photo credit<input name="photoCredit" value="${e(item.photoCredit || '')}" placeholder="Photographer · license"></label><label>Photo credit source URL<input name="photoCreditUrl" type="url" value="${e(item.photoCreditUrl || '')}" placeholder="https://…"></label><label class="check-row"><input name="featured" type="checkbox" ${item.featured ? 'checked' : ''}> Feature this journey</label><label class="check-row"><input name="showInDestinations" type="checkbox" ${item.showInDestinations ? 'checked' : ''}> Show in Places section</label><div class="admin-form-actions"><button type="button" class="button button-ghost" data-close-admin-modal>Cancel</button><button type="submit" class="button button-dark" id="savePackageButton">Save journey <span>✓</span></button></div></form>`;
     document.getElementById('packageForm').addEventListener('submit', savePackage);
   } else {
     const item = adminData.testimonials.find(entry => entry.id === id) || { quote:'', name:'', location:'', rating:5 };
@@ -140,6 +143,7 @@ async function savePackage(event) {
   button.disabled = true;
   const urls = String(form.get('images') || '').split('\n').map(url => url.trim()).filter(url => /^https:\/\//i.test(url) || url.startsWith('/api/media?path='));
   try {
+    const existing = editingPackageId ? adminData.packages.find(entry => entry.id === editingPackageId) : null;
     const files = Array.from(formElement.elements.photoFiles.files || []);
     for (let index = 0; index < files.length; index += 1) {
       button.innerHTML = `Uploading photo ${index + 1} of ${files.length} <span>…</span>`;
@@ -147,7 +151,10 @@ async function savePackage(event) {
     }
     const item = {
       id:editingPackageId || `p-${crypto.randomUUID()}`,
-      title:String(form.get('title')).trim(), tag:String(form.get('tag')).trim(), location:String(form.get('location')).trim(), duration:String(form.get('duration')).trim(), price:String(form.get('price')).trim(), category:String(form.get('category')), description:String(form.get('description')).trim(), image:urls[0] || '', images:urls, photoCredit:String(form.get('photoCredit')).trim(), photoCreditUrl:String(form.get('photoCreditUrl')).trim(), status:String(form.get('status')), featured:form.get('featured') === 'on', showInDestinations:form.get('showInDestinations') === 'on'
+      title:String(form.get('title')).trim(), tag:String(form.get('tag')).trim(), location:String(form.get('location')).trim(), duration:String(form.get('duration')).trim(), price:String(form.get('price')).trim(), category:String(form.get('category')), description:String(form.get('description')).trim(), image:urls[0] || '', images:urls, photoCredit:String(form.get('photoCredit')).trim(), photoCreditUrl:String(form.get('photoCreditUrl')).trim(), status:String(form.get('status')), featured:form.get('featured') === 'on', showInDestinations:form.get('showInDestinations') === 'on',
+      includes:form.getAll('includes').map(String), inclusions:String(form.get('inclusions') || '').split('\n').map(line => line.trim()).filter(Boolean).slice(0, 20),
+      // Keep a journey's web address stable even if its name is edited later.
+      slug:existing?.slug || slugify(existing?.title || form.get('title')) || undefined
     };
     if (!item.title || !item.location || !item.duration || !item.price) throw new Error('Add a journey name, location, duration and price.');
     if (editingPackageId) adminData.packages = adminData.packages.map(existing => existing.id === editingPackageId ? item : existing);
@@ -175,6 +182,8 @@ async function openAdmin() {
     document.getElementById('loginScreen').hidden = true;
     document.getElementById('adminApp').hidden = false;
     document.querySelector('.admin-user span:nth-child(2)').textContent = 'Shared live workspace';
+    const hour = Number(new Intl.DateTimeFormat('en-IN', { hour:'numeric', hourCycle:'h23', timeZone:'Asia/Kolkata' }).format(new Date()));
+    document.getElementById('adminGreeting').textContent = hour < 12 ? 'Good morning.' : hour < 17 ? 'Good afternoon.' : 'Good evening.';
     navigate('dashboard');
     document.getElementById('settingsSaved').textContent = '● Published live';
   } catch (error) {
@@ -234,8 +243,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     const deleteBooking = event.target.closest('[data-delete-booking]')?.dataset.deleteBooking;
     if (deleteBooking && confirm('Delete this enquiry?')) {
-      const previous = clone(adminData); adminData.bookings = adminData.bookings.filter(item => item.id !== deleteBooking);
-      if (!await persist('Enquiry deleted')) adminData = previous;
+      try {
+        await api(`/api/inquiry?id=${encodeURIComponent(deleteBooking)}`, { method:'DELETE' });
+        adminData.bookings = adminData.bookings.filter(item => item.id !== deleteBooking);
+        toast('Enquiry deleted');
+      } catch (error) { toast(`Delete failed: ${error.message}`); }
       renderBookingsTable(); renderDashboard();
     }
     if (event.target.closest('[data-close-admin-modal]')) closeAdminModal();
@@ -251,8 +263,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     const id = event.target.dataset.bookingStatus;
     const item = adminData?.bookings.find(booking => booking.id === id);
     if (!item) return;
-    const previous = item.status; item.status = event.target.value;
-    if (!await persist('Enquiry status updated')) item.status = previous;
+    try {
+      await api('/api/inquiry', { method:'PATCH', body:JSON.stringify({ id, status:event.target.value }) });
+      item.status = event.target.value; toast('Enquiry status updated');
+    } catch (error) { toast(`Update failed: ${error.message}`); }
     renderBookingsTable(); renderDashboard();
   });
 
@@ -267,13 +281,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   document.getElementById('resetDemo').addEventListener('click', async () => {
-    if (!confirm('Reset all website content and journeys to the original demo data?')) return;
+    const answer = prompt('This replaces ALL live journeys, testimonials and site settings with the starting content. Enquiries are kept.\n\nType RESET to continue.');
+    if (String(answer || '').trim().toUpperCase() !== 'RESET') return;
     const previous = clone(adminData);
     try {
       const response = await fetch('/data/site-content.json', { cache:'no-store' });
       if (!response.ok) throw new Error('Could not load the starting content.');
-      adminData = await response.json();
-      if (!await persist('Demo content reset and published')) adminData = previous;
+      adminData = { ...(await response.json()), bookings: previous.bookings };
+      if (!await persist('Starting content restored and published')) adminData = previous;
       populateSettings(); navigate('dashboard');
     } catch (error) { adminData = previous; toast(error.message); }
   });
