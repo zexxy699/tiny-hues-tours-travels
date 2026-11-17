@@ -29,12 +29,13 @@ module.exports = async function handler(req, res) {
     let content;
     try { content = publicContent(await readSiteData()); } catch (error) { console.error('Content read failed, using defaults', error); content = publicContent(defaultContent()); }
     const key = String(req.query?.journey || '').slice(0, 120);
+    const site = seo.siteUrlFor(req);
     const journey = key ? seo.findJourney(content.packages, key) : null;
     if (key && !journey) {
       status = 404;
-      try { html = notFoundPage(content); } catch { html = seo.applyHead(loadTemplate(), content, null); }
+      try { html = notFoundPage(content); } catch { html = seo.applyHead(loadTemplate(), content, null, site); }
     } else {
-      html = seo.applyHead(loadTemplate(), content, journey);
+      html = seo.applyHead(loadTemplate(), content, journey, site);
     }
   } catch (error) {
     // Never let the SEO layer take the site down: fall back to the plain page.

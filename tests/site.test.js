@@ -104,8 +104,17 @@ test('unknown journey address shows the 404 page with live journeys', async () =
   assert.ok((res.body.match(/class="nf-link"/g) || []).length >= 1);
 });
 
+test('tags follow the address the site is served from', async () => {
+  const apex = await call(home, { query: {}, headers: { host: 'tinyhuestour.com' } });
+  assert.match(apex.body, /<link rel="canonical" href="https:\/\/tinyhuestour.com\/" \/>/);
+  const preview = await call(home, { query: {}, headers: { host: 'sea-abc.vercel.app' } });
+  assert.match(preview.body, /<link rel="canonical" href="https:\/\/www.tinyhuestour.com\/" \/>/);
+  const map = await call(sitemap, { headers: { host: 'tinyhuestour.com' } });
+  assert.match(map.body, /<loc>https:\/\/tinyhuestour.com\/journeys\//);
+});
+
 test('sitemap lists the homepage and live journeys on www', async () => {
-  const res = await call(sitemap, {});
+  const res = await call(sitemap, { headers: { host: 'www.tinyhuestour.com' } });
   assert.match(res.body, /<loc>https:\/\/www.tinyhuestour.com\/<\/loc>/);
   assert.match(res.body, /<loc>https:\/\/www.tinyhuestour.com\/journeys\/[a-z0-9-]+<\/loc>/);
 });

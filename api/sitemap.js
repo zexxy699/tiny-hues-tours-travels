@@ -7,7 +7,8 @@ module.exports = async function handler(req, res) {
   let content;
   try { content = await readSiteData(); } catch { content = defaultContent(); }
   const lastmod = String(content.updatedAt || new Date().toISOString()).slice(0, 10);
-  const urls = [`${seo.SITE_URL}/`].concat((content.packages || []).filter(item => item.status === 'live').map(seo.journeyUrl));
+  const site = seo.siteUrlFor(req);
+  const urls = [`${site}/`].concat((content.packages || []).filter(item => item.status === 'live').map(item => seo.journeyUrl(item, site)));
   res.setHeader('Content-Type', 'application/xml; charset=utf-8');
   res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
   res.setHeader('Vercel-CDN-Cache-Control', 'max-age=3600, stale-while-revalidate=86400');
