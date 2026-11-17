@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (year) year.textContent = new Date().getFullYear();
 
   document.querySelectorAll('.filter-tab').forEach(button => button.addEventListener('click', () => {
-    document.querySelectorAll('.filter-tab').forEach(item => { item.classList.toggle('active', item === button); item.setAttribute('aria-pressed', String(item === button)); });
+    document.querySelectorAll('.filter-tab').forEach(item => item.classList.toggle('active', item === button));
     activeFilter = button.dataset.filter;
     renderPackages();
   }));
@@ -203,11 +203,15 @@ document.addEventListener('DOMContentLoaded', () => {
       const photos = item ? R.photosOf(item) : [];
       const index = Number(thumb.dataset.galleryImage);
       const image = byId('modalImage');
-      if (photos[index] && image) image.src = photos[index];
-      document.querySelectorAll('[data-gallery-image]').forEach(node => { node.classList.toggle('active', node === thumb); node.setAttribute('aria-pressed', String(node === thumb)); });
+      if (photos[index] && image) image.style.backgroundImage = `url('${R.cssUrl(photos[index]).replace(/&amp;/g, '&')}')`;
+      document.querySelectorAll('[data-gallery-image]').forEach(node => node.classList.toggle('active', node === thumb));
     }
   });
   document.addEventListener('keydown', trapFocus);
+  byId('packageGrid')?.addEventListener('keydown', event => {
+    const card = event.target.closest('.package-card');
+    if (card && event.target === card && (event.key === 'Enter' || event.key === ' ')) { event.preventDefault(); showJourney(findPackage(card.dataset.packageId)); }
+  });
   window.addEventListener('popstate', syncJourneyWithUrl);
   if (!byId('packageModal')?.hidden) {
     // Opened directly on /journeys/:slug — closing should land on the homepage.

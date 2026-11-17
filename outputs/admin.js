@@ -182,8 +182,6 @@ async function openAdmin() {
     document.getElementById('loginScreen').hidden = true;
     document.getElementById('adminApp').hidden = false;
     document.querySelector('.admin-user span:nth-child(2)').textContent = 'Shared live workspace';
-    const hour = Number(new Intl.DateTimeFormat('en-IN', { hour:'numeric', hourCycle:'h23', timeZone:'Asia/Kolkata' }).format(new Date()));
-    document.getElementById('adminGreeting').textContent = hour < 12 ? 'Good morning.' : hour < 17 ? 'Good afternoon.' : 'Good evening.';
     navigate('dashboard');
     document.getElementById('settingsSaved').textContent = '● Published live';
   } catch (error) {

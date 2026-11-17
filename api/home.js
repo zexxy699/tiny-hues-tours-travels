@@ -20,7 +20,7 @@ function loadNotFoundTemplate() {
 // A journey link that no longer exists gets the branded 404 page, with live suggestions.
 function renderNotFound(data) {
   try {
-    const cards = R.suggestedJourneys(data.packages, 3).map(R.packageCardHtml).join('');
+    const cards = R.notFoundLinksHtml(R.suggestedJourneys(data.packages, 4));
     return loadNotFoundTemplate().replace('<!--journeys-->', cards);
   } catch (error) {
     console.error('404 template unavailable', error);

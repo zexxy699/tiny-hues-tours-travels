@@ -4,4 +4,4 @@ Disallow: /adminapage
 Disallow: /api/
 Allow: /api/media
 
-Sitemap: https://tinyhuestour.com/sitemap.xml
+Sitemap: https://www.tinyhuestour.com/sitemap.xml

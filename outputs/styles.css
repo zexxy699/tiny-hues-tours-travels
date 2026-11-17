@@ -301,12 +301,8 @@ body.cookie-banner-open .whatsapp-float{display:none}
   body:not(.admin-page) .package-card:hover,body:not(.admin-page) .destination-card:hover{transform:none}
 }
 
-/* ---------- Journey inclusions, real journey links, SEO-friendly images ---------- */
-.package-card-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+/* ---------- Added: journey "What's included" icons + inclusion list ---------- */
 .package-info h3 a{color:inherit;text-decoration:none}
-.package-link:after{content:'';position:absolute;inset:0;z-index:2}
-.package-link:focus-visible{outline:none}
-.package-card:focus-within{outline:2px solid var(--focus);outline-offset:5px}
 .card-includes{list-style:none;margin:4px 0 2px;padding:0;display:flex;flex-wrap:wrap;gap:6px}
 .card-includes li{width:32px;height:32px;border-radius:9px;background:#eef6f4;border:1px solid #deece8;display:grid;place-items:center}
 .card-includes .include-icon{width:18px;height:18px;stroke-width:1.6}
@@ -319,73 +315,20 @@ body.cookie-banner-open .whatsapp-float{display:none}
 .inclusion-list{list-style:none;margin:0;padding:16px 18px;display:grid;gap:10px;border-top:1px dashed #cfdedd;border-bottom:1px dashed #cfdedd;background:#fbfcfa}
 .inclusion-list li{position:relative;padding-left:26px;font-size:14px;font-weight:500;line-height:1.45;color:var(--ink)}
 .inclusion-list li:before{content:'';position:absolute;left:0;top:2px;width:16px;height:16px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23a26d32' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 4l4 4-4 4M9 4l4 4-4 4'/%3E%3C/svg%3E") center/16px no-repeat}
-img.modal-image{display:block;object-fit:cover;background:#e8f1f1}
-.modal-close{display:grid;place-items:center;width:44px;height:44px;right:8px;top:8px;border-radius:50%;background:rgba(255,255,255,.92);text-decoration:none;box-shadow:0 2px 10px rgba(5,26,38,.08)}
-.modal-close:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
-blockquote.testimonial-quote{margin:0}
-.scroll-icon:after{border:0;width:7px;height:7px;margin:-3px 0 0;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg)}
-.social-links a[hidden]{display:none}
+/* The details panel is taller now, so let it scroll instead of running off screen. */
 @media(min-width:1001px){
-  .package-modal{max-width:900px;max-height:calc(100svh - 48px)}
+  .package-modal{max-height:calc(100svh - 48px)}
   .modal-body{max-height:calc(100svh - 48px);overflow-y:auto;overscroll-behavior:contain}
-  .modal-gallery{padding-bottom:20px}
-  img.modal-image{flex:1 1 330px;height:auto;min-height:330px}
 }
-#packageDialog:focus{outline:none}
 @media(max-width:720px){
   .include-strip{grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:7px}
-  .include-strip li{min-height:78px;font-size:11.5px}
-  .inclusion-list{padding:14px 14px}
+  .include-strip li{min-height:78px}
+  .inclusion-list{padding:14px}
   .inclusion-list li{font-size:15px}
 }
-@media(prefers-reduced-motion:reduce){.package-card:hover{transform:none}}
+/* Admin: "What's included" checkboxes in the journey editor */
 .include-picker{grid-column:1/-1;min-width:0;border:1px solid var(--line);border-radius:8px;padding:10px 14px 14px;margin:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 16px}
 .include-picker legend{padding:0 6px;font-size:13px;font-weight:700;color:#465f6e}
 .include-picker legend .field-hint{display:block;font-weight:400}
 .admin-form .include-picker .check-row{margin:0;font-weight:500;white-space:nowrap;min-height:28px}
 @media(max-width:720px){.include-picker{grid-template-columns:repeat(2,minmax(0,1fr))}}
-/* WCAG AA contrast: muted text ≥ 4.5:1, large italic headings ≥ 3:1 */
-body:not(.admin-page) .admin-link,body:not(.admin-page) .rail-heading>p,body:not(.admin-page) .filter-tab:not(.active),.leader-kicker,.testimonial-side>span:nth-child(2),.modal-meta,body:not(.admin-page) .modal-body>p{color:#5a6e79!important}
-.section-heading h2 em,.story-content h2 em,.testimonial-top h2 em,.contact-intro h2 em{color:#5b8f85}
-/* The decorative "Most loved" card collided with the hero buttons on phones. */
-@media(max-width:720px){body:not(.admin-page) .hero-float-card{display:none}}
-
-/* ---------- 404 page ---------- */
-.not-found-page{background:#fbfcfa}
-.not-found-page .site-header{position:sticky;top:0}
-.nf-hero{position:relative;overflow:hidden;color:#fff;background:linear-gradient(115deg,#071f33 0%,#0c3853 58%,#16506a 100%);padding:96px 0 150px}
-.nf-ridge{position:absolute;left:0;right:0;bottom:-1px;width:100%;height:240px}
-.nf-hero-inner{position:relative;max-width:760px;margin-left:max(36px,calc((100% - 1170px)/2))}
-.nf-code{position:absolute;right:-40px;top:-50px;font-family:'Newsreader',Georgia,serif;font-size:260px;line-height:1;font-weight:500;letter-spacing:-.05em;color:rgba(255,255,255,.06);pointer-events:none;user-select:none}
-.nf-kicker{color:#e7b878!important}
-.nf-hero h1{font-family:'Newsreader',Georgia,serif;font-weight:500;font-size:68px;line-height:1.02;letter-spacing:-.035em;margin:16px 0 20px}
-.nf-hero h1 em{color:#e7b878;font-style:italic}
-.nf-hero p{max-width:540px;margin:0;color:#d4e4e8;font-size:17px;line-height:1.7}
-.nf-actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
-.nf-actions .button-light{background:#f9f5eb;color:var(--night)}
-.nf-button-ghost{border:1px solid rgba(255,255,255,.45);color:#fff;background:transparent}
-.nf-button-ghost:hover{background:rgba(255,255,255,.08)}
-.nf-actions .button:focus-visible,.nf-help .button:focus-visible{outline:2px solid #e7b878;outline-offset:3px}
-.nf-suggestions{padding-top:40px}
-.nf-suggest-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:28px}
-.nf-suggest-head[hidden]{display:none}
-.nf-suggest-head h2{font-family:'Newsreader',Georgia,serif;font-weight:500;font-size:44px;line-height:1.05;letter-spacing:-.03em;margin:10px 0 0}
-.nf-suggest-head h2 em{color:#5b8f85}
-.nf-grid:empty{display:none}
-.nf-help{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-top:44px;padding:24px 28px;border:1px solid #e3ecee;border-radius:14px;background:#fff}
-.nf-help p{margin:0;font-size:16px;color:var(--ink)}
-.nf-footer{border-top:1px solid #e3ecee;padding:22px 0;font-size:13px;color:#5a6e79}
-.nf-footer .container{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
-@media(max-width:720px){
-  .nf-hero{padding:64px 0 120px}
-  .nf-hero-inner{margin:0 auto}
-  .nf-code{font-size:150px;right:-6px;top:-30px}
-  .nf-hero h1{font-size:46px}
-  .nf-hero p{font-size:16px}
-  .nf-actions .button{width:100%}
-  .nf-suggest-head{flex-direction:column;align-items:flex-start}
-  .nf-suggest-head h2{font-size:34px}
-  .nf-help{flex-direction:column;align-items:stretch;text-align:left;padding:20px}
-  .nf-help .button{width:100%}
-}
-@media(max-width:400px){.not-found-page .site-header .button{padding:10px 12px;gap:8px}.not-found-page .site-header .button .icon{display:none}}

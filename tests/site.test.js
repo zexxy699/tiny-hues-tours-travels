@@ -15,8 +15,8 @@ test.beforeEach(() => mock.store.clear());
 test('renderer helpers', () => {
   assert.equal(R.slugify('Gurez · Beyond the Pass'), 'gurez-beyond-the-pass');
   assert.equal(R.slugify('Gulmarg & Sonamarg'), 'gulmarg-and-sonamarg');
-  assert.equal(R.heroTitleHtml('Go where the *quiet* lives.'), 'Go where the<br><em>quiet</em> lives.');
-  assert.equal(R.heroTitleHtml('Go where the quiet lives.'), 'Go where the<br><em>quiet</em> lives.');
+  assert.equal(R.heroTitleHtml('Go where the quiet lives.'), 'Go where the quiet<br><em>lives.</em>');
+  assert.equal(R.heroTitleHtml('Go where the *quiet* lives.'), 'Go where the quiet<br><em>lives.</em>');
   assert.equal(R.heroTitleHtml('See <b>it</b>'), 'See<br><em>&lt;b&gt;it&lt;/b&gt;</em>');
   assert.equal(R.initials('Umaiq Aijaz'), 'UA');
   assert.equal(R.cssUrl("x') ;background:red"), 'x%27%29%20;background:red');
@@ -32,7 +32,7 @@ test('migrations fill inclusions and real social links without overwriting edits
   });
   assert.equal(out.settings.instagram, 'https://www.instagram.com/tinyhuestourandtravels');
   assert.equal(out.settings.facebook, '', 'a deliberately cleared link stays cleared');
-  assert.equal(out.settings.heroTitle, 'Go where the *quiet* lives.');
+  assert.equal(out.settings.heroTitle, 'Go where the quiet lives.');
   assert.ok(out.packages[0].includes.includes('hotels'));
   assert.ok(out.packages[0].inclusions.length > 0);
   assert.deepEqual(out.packages[1].includes, []);
@@ -83,9 +83,11 @@ test('homepage is server-rendered with SEO tags and structured data', async () =
   const res = await call(home, { query: {} });
   assert.equal(res.statusCode, 200);
   assert.doesNotMatch(res.body, /\{\{/);
-  assert.match(res.body, /<link rel="canonical" href="https:\/\/tinyhuestour.com\/">/);
-  assert.match(res.body, /property="og:image" content="https:\/\/tinyhuestour.com\/assets\/og-image.jpg"/);
-  assert.match(res.body, /class="package-card"/);
+  assert.match(res.body, /<link rel="canonical" href="https:\/\/www.tinyhuestour.com\/">/);
+  assert.match(res.body, /property="og:image" content="https:\/\/www.tinyhuestour.com\/assets\/og-image.jpg"/);
+  assert.match(res.body, /class="package-card" data-package-id="p1" tabindex="0"/);
+  assert.match(res.body, /class="package-card-arrow"/);
+  assert.match(res.body, /class="hero-float-card"/);
   assert.match(res.body, /href="\/journeys\/gurez-beyond-the-pass"/);
   assert.match(res.body, /https:\/\/www.instagram.com\/tinyhuestourandtravels/);
   const ld = JSON.parse(res.body.match(/<script type="application\/ld\+json">(.*?)<\/script>/)[1]);
@@ -103,7 +105,7 @@ test('journey pages have their own title, canonical and TouristTrip data', async
   const res = await call(home, { query: { journey: 'gurez-beyond-the-pass' } });
   assert.equal(res.statusCode, 200);
   assert.match(res.body, /<title>Gurez · Beyond the Pass/);
-  assert.match(res.body, /rel="canonical" href="https:\/\/tinyhuestour.com\/journeys\/gurez-beyond-the-pass"/);
+  assert.match(res.body, /rel="canonical" href="https:\/\/www.tinyhuestour.com\/journeys\/gurez-beyond-the-pass"/);
   assert.match(res.body, /class="include-strip"/);
   assert.match(res.body, /id="packageModal" data-package-id="gurez" >/);
   const ld = JSON.parse(res.body.match(/<script type="application\/ld\+json">(.*?)<\/script>/)[1]);
@@ -126,8 +128,8 @@ test('journey URLs stay stable after a rename', async () => {
 test('sitemap lists the homepage and every live journey', async () => {
   const res = await call(sitemap, {});
   const urls = res.body.match(/<loc>[^<]+<\/loc>/g);
-  assert.ok(urls.includes('<loc>https://tinyhuestour.com/</loc>'));
-  assert.ok(urls.includes('<loc>https://tinyhuestour.com/journeys/sonamarg-meadow-of-gold</loc>'));
+  assert.ok(urls.includes('<loc>https://www.tinyhuestour.com/</loc>'));
+  assert.ok(urls.includes('<loc>https://www.tinyhuestour.com/journeys/sonamarg-meadow-of-gold</loc>'));
   assert.ok(!res.body.includes('winter-warmly'));
 });
 
@@ -148,9 +150,9 @@ test('seo helpers', () => {
 test('missing journey links get the branded 404 page with live suggestions', async () => {
   const res = await call(home, { query: { journey: 'deleted-trip' } });
   assert.equal(res.statusCode, 404);
-  assert.match(res.body, /This trail <em>fades out<\/em> here/);
+  assert.match(res.body, /This page has <em>wandered off.<\/em>/);
   assert.match(res.body, /noindex/);
-  assert.equal((res.body.match(/class="package-card"/g) || []).length, 3);
+  assert.equal((res.body.match(/class="nf-link"/g) || []).length, 4);
   assert.doesNotMatch(res.body, /<!--journeys-->/);
   assert.doesNotMatch(res.body, /Winter, warmly/);
 });

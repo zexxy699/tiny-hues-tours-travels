@@ -4,77 +4,81 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Page not found | Tiny Hues Tours &amp; Travels</title>
-  <meta name="description" content="This page could not be found. Explore Kashmir tour packages from Tiny Hues Tours & Travels, Srinagar." />
   <meta name="robots" content="noindex, follow" />
-  <meta name="theme-color" content="#0a2940" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css" />
   <link rel="icon" href="/assets/tiny-hues-logo.png" type="image/png" />
-  <link rel="apple-touch-icon" href="/assets/tiny-hues-logo.png" />
+  <style>
+    .nf-main{background:var(--pale,#f3f8f9);padding:90px 0 110px;min-height:calc(100vh - 82px)}
+    .nf-box{max-width:620px;margin:0 auto;text-align:center}
+    .nf-box h1{font-family:'Newsreader',Georgia,serif;font-weight:500;font-size:52px;line-height:1.05;letter-spacing:-.03em;margin:14px 0 16px;color:var(--ink)}
+    .nf-box h1 em{font-style:italic;color:#83b4ab}
+    .nf-box>p{margin:0 auto;max-width:460px;color:#4c6573;font-size:16px;line-height:1.7}
+    .nf-actions{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin-top:30px}
+    .nf-list-wrap{margin-top:54px;text-align:left}
+    .nf-list-wrap[hidden]{display:none}
+    .nf-list-title{display:block;margin-bottom:12px;text-align:center}
+    .nf-list{list-style:none;margin:0;padding:0;background:#fff;border:1px solid var(--line,#dbe6e9);border-radius:10px;overflow:hidden}
+    .nf-list li+li{border-top:1px solid var(--line,#dbe6e9)}
+    .nf-link{display:flex;align-items:center;gap:14px;padding:16px 20px;color:var(--ink)}
+    .nf-link:hover{background:#f7fbfb}
+    .nf-link-title{flex:1;font-family:'Newsreader',Georgia,serif;font-size:20px}
+    .nf-link-meta{font-size:13px;color:#5d7380;white-space:nowrap}
+    .nf-help{margin-top:26px;text-align:center;font-size:14px;color:#4c6573}
+    .nf-help a{color:var(--ink);font-weight:700;text-decoration:underline;text-underline-offset:3px}
+    @media(max-width:720px){
+      .nf-main{padding:56px 0 80px}
+      .nf-box h1{font-size:38px}
+      .nf-actions .button{width:100%}
+      .nf-link{flex-wrap:wrap;gap:4px 12px;padding:14px 16px}
+      .nf-link-title{flex-basis:calc(100% - 30px);font-size:18px}
+      .nf-link .icon{order:2}
+      .nf-link-meta{order:3;width:100%}
+    }
+  </style>
 </head>
-<body class="not-found-page">
+<body>
   <header class="site-header">
     <div class="container nav-wrap">
       <a class="brand" href="/" aria-label="Tiny Hues home">
-        <span class="brand-logo"><img src="/assets/tiny-hues-logo.png" alt="Tiny Hues Tours & Travels logo" width="66" height="66"></span>
+        <span class="brand-logo"><img src="/assets/tiny-hues-logo.png" alt="Tiny Hues Tours & Travels logo"></span>
         <span class="brand-copy"><strong>TINY HUES</strong><small>TOURS & TRAVELS</small></span>
       </a>
-      <a class="button button-small button-dark" href="/#contact">Plan my trip <span class="icon icon-arrow" aria-hidden="true"></span></a>
     </div>
   </header>
 
-  <main>
-    <section class="nf-hero" aria-labelledby="nfTitle">
-      <svg class="nf-ridge" viewBox="0 0 1200 330" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-        <path d="M0 230 L170 120 L290 190 L470 40 L640 175 L760 110 L930 205 L1060 130 L1200 190 V330 H0Z" fill="#fff" opacity=".05"/>
-        <path d="M0 280 L210 190 L400 255 L610 150 L820 245 L1010 185 L1200 240 V330 H0Z" fill="#fff" opacity=".07"/>
-        <path d="M0 330 V300 C200 270 360 318 600 292 S1000 262 1200 300 V330Z" fill="#fbfcfa"/>
-      </svg>
-      <div class="container nf-hero-inner">
-        <span class="nf-code" aria-hidden="true">404</span>
-        <span class="kicker nf-kicker">PAGE NOT FOUND</span>
-        <h1 id="nfTitle">This trail <em>fades out</em> here.</h1>
-        <p>The page you were looking for may have moved, or the link may have a small typo. The valley is still right where we left it.</p>
-        <div class="nf-actions">
-          <a class="button button-light" href="/">Back to the homepage <span class="icon icon-arrow" aria-hidden="true"></span></a>
-          <a class="button nf-button-ghost" href="/#packages">Browse all journeys</a>
-        </div>
+  <main class="nf-main">
+    <div class="container nf-box">
+      <span class="kicker">PAGE NOT FOUND</span>
+      <h1>This page has <em>wandered off.</em></h1>
+      <p>The link may be old or mistyped. Everything else is right where it was.</p>
+      <div class="nf-actions">
+        <a class="button button-dark" href="/">Back to homepage <span class="icon icon-arrow" aria-hidden="true"></span></a>
+        <a class="button button-outline" href="/#packages">See all journeys</a>
       </div>
-    </section>
-
-    <section class="section nf-suggestions" aria-labelledby="nfSuggestTitle">
-      <div class="container">
-        <div class="nf-suggest-head">
-          <div><span class="kicker">PERHAPS YOU WERE LOOKING FOR</span><h2 id="nfSuggestTitle">Journeys guests <em>love</em></h2></div>
-          <a class="arrow-link" href="/#packages">See every journey <span class="icon icon-arrow" aria-hidden="true"></span></a>
-        </div>
-        <div id="notFoundJourneys" class="package-grid nf-grid"><!--journeys--></div>
-        <div class="nf-help">
-          <p><strong>Still can't find it?</strong> Message us and a real person will point you the right way.</p>
-          <a class="button button-dark" href="https://wa.me/916006473963" target="_blank" rel="noopener noreferrer">Chat on WhatsApp <span class="icon icon-arrow" aria-hidden="true"></span></a>
-        </div>
+      <div class="nf-list-wrap" id="nfListWrap">
+        <span class="kicker nf-list-title">POPULAR JOURNEYS</span>
+        <ul class="nf-list" id="notFoundJourneys"><!--journeys--></ul>
       </div>
-    </section>
+      <p class="nf-help">Need help? <a href="https://wa.me/916006473963" target="_blank" rel="noreferrer">Chat with us on WhatsApp</a></p>
+    </div>
   </main>
-
-  <footer class="nf-footer"><div class="container"><span>© Tiny Hues Tours &amp; Travels · Srinagar, Kashmir</span><a href="/">tinyhuestour.com</a></div></footer>
 
   <script src="/render.js"></script>
   <script>
-    // On the static 404 (any unknown address) fill the suggestions in the browser;
-    // missing journey links get them rendered on the server instead.
+    // Unknown addresses get this static page: fill the journey list in the browser.
     (function () {
-      var grid = document.getElementById('notFoundJourneys');
-      if (!grid || grid.querySelector('.package-card') || !window.TinyHuesRender) return;
+      var list = document.getElementById('notFoundJourneys');
+      var wrap = document.getElementById('nfListWrap');
+      if (!list || list.querySelector('li')) return;
+      function hide() { wrap.hidden = true; }
+      if (!window.TinyHuesRender) return hide();
       fetch('/api/content').then(function (r) { return r.ok ? r.json() : null; }).then(function (result) {
-        var packages = (result && result.content && result.content.packages) || [];
-        var picks = window.TinyHuesRender.suggestedJourneys(packages, 3);
-        if (picks.length) grid.innerHTML = picks.map(window.TinyHuesRender.packageCardHtml).join('');
-        else hideSuggestions();
-      }).catch(hideSuggestions);
-      function hideSuggestions() { grid.closest('.nf-suggestions').querySelector('.nf-suggest-head').hidden = true; }
+        var picks = window.TinyHuesRender.suggestedJourneys((result && result.content && result.content.packages) || [], 4);
+        if (picks.length) list.innerHTML = window.TinyHuesRender.notFoundLinksHtml(picks); else hide();
+      }).catch(hide);
     }());
   </script>
 </body>

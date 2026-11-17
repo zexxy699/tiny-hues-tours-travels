@@ -4,8 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   {{{head}}}
-  <meta name="theme-color" content="#0a2940" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet">
   {{{heroImagePreload}}}
@@ -49,7 +48,7 @@
         <p id="heroSubtitle">{{heroSubtitle}}</p>
         <div class="hero-actions">
           <a class="button button-light" href="/#packages">Find your journey <span class="icon icon-arrow" aria-hidden="true"></span></a>
-          <a class="text-button video-trigger" href="/#story"><span class="play-icon scroll-icon" aria-hidden="true"></span> Why Tiny Hues</a>
+          <a class="text-button video-trigger" href="/#story"><span class="play-icon" aria-hidden="true"></span> Why Tiny Hues</a>
         </div>
         <div class="hero-footnote"><span>01</span><span class="hero-progress"><i></i></span><span>Designed for unhurried travel</span></div>
       </div>
@@ -88,11 +87,11 @@
         </div>
         <div class="package-toolbar">
           <div class="toolbar-label">Browse the collection</div>
-          <div class="filter-tabs" role="group" aria-label="Filter journeys">
-            <button type="button" class="filter-tab active" aria-pressed="true" data-filter="all">All journeys</button>
-            <button type="button" class="filter-tab" aria-pressed="false" data-filter="valley">Valley escapes</button>
-            <button type="button" class="filter-tab" aria-pressed="false" data-filter="mountains">High mountains</button>
-            <button type="button" class="filter-tab" aria-pressed="false" data-filter="spiritual">Soulful trails</button>
+          <div class="filter-tabs" role="tablist">
+            <button class="filter-tab active" data-filter="all">All journeys</button>
+            <button class="filter-tab" data-filter="valley">Valley escapes</button>
+            <button class="filter-tab" data-filter="mountains">High mountains</button>
+            <button class="filter-tab" data-filter="spiritual">Soulful trails</button>
           </div>
           <label class="search-field"><span aria-hidden="true">⌕</span><input id="packageSearch" type="search" placeholder="Search a destination" aria-label="Search journeys by destination" /></label>
         </div>
@@ -103,7 +102,7 @@
     </section>
 
     <section class="story-section" id="story">
-      <div class="story-image-wrap"><img src="https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=1100&q=85" alt="Mist over a pine forest in Kashmir" loading="lazy" decoding="async" width="1100" height="1375" /><span class="image-caption">Somewhere near Pahalgam</span></div>
+      <div class="story-image-wrap"><img src="https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=1100&q=85" alt="Mist over a pine forest in Kashmir" /><span class="image-caption">Somewhere near Pahalgam</span></div>
       <div class="story-content"><span class="kicker">A LITTLE ABOUT US</span><h2>Travel should feel like a <em>story</em> you want to keep.</h2><p>Tiny Hues started with a simple idea: the best Kashmir journeys are not about ticking places off a list. They are about finding a slower rhythm, meeting the people who make a place, and coming home with more than photographs.</p><p>We pair local knowledge with thoughtful planning so every detail feels easy — without making the journey feel over-produced.</p><a class="button button-outline" href="/#difference">The Tiny Hues difference <span class="icon icon-arrow" aria-hidden="true"></span></a></div>
     </section>
 
@@ -127,7 +126,7 @@
 
     <section class="feature-band">
       <div class="feature-copy"><span class="kicker">BEYOND THE ITINERARY</span><h2>Let the day<br><em>surprise you.</em></h2><p>From a saffron farm outside Pampore to a sunset shikara ride, the best parts are often the ones we leave space for.</p><a class="button button-light" href="/#contact">Tell us what you love <span class="icon icon-arrow" aria-hidden="true"></span></a></div>
-      <div class="feature-collage"><img class="collage-main" src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1000&q=85" alt="Snowy mountain valley in Kashmir" loading="lazy" decoding="async" width="1000" height="667" /><img class="collage-small" src="https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=600&q=85" alt="Mountain lake at sunrise" loading="lazy" decoding="async" width="600" height="400" /><span class="collage-stamp">slow<br>travel<br>club</span></div>
+      <div class="feature-collage"><img class="collage-main" src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1000&q=85" alt="Snowy mountain valley" /><img class="collage-small" src="https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=600&q=85" alt="Mountain lake at sunrise" /><span class="collage-stamp">slow<br>travel<br>club</span></div>
     </section>
 
     <section class="section testimonial-section">
@@ -145,7 +144,7 @@
     </section>
   </main>
 
-  <footer class="site-footer"><div class="container footer-top"><a class="brand brand-light" href="/#top"><span class="brand-logo"><img src="/assets/tiny-hues-logo.png" alt="Tiny Hues Tours & Travels logo"></span><span class="brand-copy"><strong>TINY HUES</strong><small>TOURS & TRAVELS</small></span></a><div class="footer-quote">The world is wide.<br><em>Take your time.</em></div><div class="footer-contact"><span>Make a plan</span><a id="footerEmail" href="{{emailHref}}">{{email}}</a><a id="footerPhone" href="{{phoneHref}}">{{phone}}</a><a id="footerDeskPhone" href="{{deskPhoneHref}}">{{deskPhone}}</a><div class="social-links"><a id="footerInstagram" href="{{instagram}}" target="_blank" rel="noopener noreferrer me" {{instagramHidden}}>Instagram</a><a id="footerFacebook" href="{{facebook}}" target="_blank" rel="noopener noreferrer me" {{facebookHidden}}>Facebook</a></div></div></div><div class="container footer-bottom"><span>© <span id="footerYear">{{year}}</span> Tiny Hues Tours & Travels</span><span>Made for meaningful journeys</span><div><a href="/#top">Back to top <span class="icon icon-arrow-up" aria-hidden="true"></span></a><a href="/adminapage" rel="nofollow">Admin <span class="icon icon-arrow" aria-hidden="true"></span></a></div></div></footer>
+  <footer class="site-footer"><div class="container footer-top"><a class="brand brand-light" href="/#top"><span class="brand-logo"><img src="/assets/tiny-hues-logo.png" alt="Tiny Hues Tours & Travels logo"></span><span class="brand-copy"><strong>TINY HUES</strong><small>TOURS & TRAVELS</small></span></a><div class="footer-quote">The world is wide.<br><em>Take your time.</em></div><div class="footer-contact"><span>Make a plan</span><a id="footerEmail" href="{{emailHref}}">{{email}}</a><a id="footerPhone" href="{{phoneHref}}">{{phone}}</a><a id="footerDeskPhone" href="{{deskPhoneHref}}">{{deskPhone}}</a><div class="social-links"><a id="footerInstagram" href="{{instagram}}" target="_blank" rel="noopener noreferrer me" {{instagramHidden}}>Instagram</a><a id="footerFacebook" href="{{facebook}}" target="_blank" rel="noopener noreferrer me" {{facebookHidden}}>Facebook</a></div></div></div><div class="container footer-bottom"><span>© <span id="footerYear">{{year}}</span> Tiny Hues Tours & Travels</span><span>Made for meaningful journeys</span><div><a href="/#top">Back to top <span class="icon icon-arrow-up" aria-hidden="true"></span></a></div></div></footer>
 
   <a class="whatsapp-float" id="floatingWhatsapp" href="{{whatsapp}}" target="_blank" rel="noopener noreferrer" aria-label="Chat with Tiny Hues on WhatsApp"><span class="whatsapp-float-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M20.5 3.5A11.8 11.8 0 0 0 12.1 0C5.6 0 .3 5.3.3 11.8c0 2.1.6 4.1 1.6 5.9L.2 24l6.5-1.7a11.8 11.8 0 0 0 5.4 1.3h.1c6.5 0 11.8-5.3 11.8-11.8 0-3.2-1.2-6.1-3.5-8.3ZM12.1 21.6c-1.7 0-3.4-.5-4.9-1.3l-.4-.2-3.8 1 1-3.7-.2-.4a9.8 9.8 0 0 1-1.5-5.2c0-5.4 4.4-9.8 9.8-9.8 2.6 0 5.1 1 6.9 2.9a9.8 9.8 0 0 1 2.9 6.9c0 5.4-4.4 9.8-9.8 9.8Zm5.4-7.3c-.3-.2-1.8-.9-2.1-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-1 1.2-.2.2-.4.2-.7.1-1.8-.9-3-1.6-4.2-3.6-.3-.5.3-.4.9-1.4.1-.2.1-.4 0-.6-.1-.2-.7-1.7-.9-2.3-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.1 1.1-1.1 2.6s1.1 3 1.3 3.2c.2.2 2.1 3.2 5.1 4.5 1.9.8 2.6.9 3.5.8.6-.1 1.8-.7 2-1.4.3-.7.3-1.3.2-1.4-.1-.2-.3-.3-.6-.4Z"/></svg></span><span class="whatsapp-float-copy">Chat with us<small>WhatsApp</small></span></a>
   <div class="modal-backdrop" id="packageModal" data-package-id="{{modalJourney}}" {{modalHidden}}><div class="package-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" id="packageDialog" tabindex="-1">{{{modalContent}}}</div></div>

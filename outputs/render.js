@@ -7,8 +7,6 @@
   if (typeof module === 'object' && module.exports) module.exports = factory();
   else root.TinyHuesRender = factory();
 }(typeof self !== 'undefined' ? self : this, function () {
-  const OLD_HERO_TITLE = 'Go where the quiet lives.';
-
   function escapeHtml(value = '') {
     return String(value ?? '').replace(/[&<>'"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[char]));
   }
@@ -37,19 +35,12 @@
 
   // "Go where the *quiet* lives." → Go where the<br><em>quiet</em> lives.
   // Without asterisks the last word is emphasised (older saved headlines).
+  // Same as the original site: the last word of the headline is shown in italics.
   function heroTitleHtml(title = '') {
-    let text = String(title || '').trim();
-    if (text === OLD_HERO_TITLE) text = 'Go where the *quiet* lives.';
-    const match = text.match(/^(.*?)\*([^*]+)\*(.*)$/);
-    if (match) {
-      const before = match[1].trim();
-      return `${before ? `${escapeHtml(before)}<br>` : ''}<em>${escapeHtml(match[2])}</em>${escapeHtml(match[3])}`;
-    }
-    const words = text.split(' ');
-    const last = words.pop() || '';
-    return words.length ? `${escapeHtml(words.join(' '))}<br><em>${escapeHtml(last)}</em>` : `<em>${escapeHtml(last)}</em>`;
+    const words = String(title || '').replace(/\*/g, '').trim().split(' ');
+    const emphasis = words.pop() || '';
+    return `${escapeHtml(words.join(' '))}<br><em>${escapeHtml(emphasis)}</em>`;
   }
-  function heroTitleText(title = '') { return String(title || '').replace(/\*/g, ''); }
 
   // Line icons drawn on a 24px grid; `.ia` strokes pick up the accent colour.
   const INCLUDE_TYPES = [
@@ -85,9 +76,9 @@
     return `<div class="journey-includes">${strip}${list}</div>`;
   }
 
+  // Original card markup; added only the title link (for search engines) and the included icons.
   function packageCardHtml(item) {
-    const cover = photosOf(item)[0] || '';
-    return `<article class="package-card" data-package-id="${escapeHtml(item.id)}"><div class="package-card-image">${cover ? `<img class="package-card-photo" src="${escapeHtml(cover)}" alt="${escapeHtml(`${shortTitle(item)}, ${item.location || 'Kashmir'}`)}" loading="lazy" decoding="async" width="600" height="400">` : ''}<span class="package-tag">${escapeHtml(item.tag)}</span><span class="package-card-arrow" aria-hidden="true"><span class="icon icon-arrow"></span></span></div><div class="package-info"><span class="location">${escapeHtml(item.location)}</span><h3><a class="package-link" href="${journeyPath(item)}" data-package-id="${escapeHtml(item.id)}">${escapeHtml(item.title)}</a></h3>${cardIncludesHtml(item)}<div class="package-bottom"><span class="package-duration">${escapeHtml(item.duration)}</span><strong class="package-price">From ${escapeHtml(item.price)}</strong></div></div></article>`;
+    return `<article class="package-card" data-package-id="${escapeHtml(item.id)}" tabindex="0"><div class="package-card-image" style="background-image:url('${cssUrl(item.image || photosOf(item)[0])}')"><span class="package-tag">${escapeHtml(item.tag)}</span><button class="package-card-arrow" data-package-id="${escapeHtml(item.id)}" aria-label="View ${escapeHtml(item.title)}"><span class="icon icon-arrow" aria-hidden="true"></span></button></div><div class="package-info"><span class="location">${escapeHtml(item.location)}</span><h3><a href="${journeyPath(item)}" data-package-id="${escapeHtml(item.id)}" tabindex="-1">${escapeHtml(item.title)}</a></h3>${cardIncludesHtml(item)}<div class="package-bottom"><span class="package-duration">${escapeHtml(item.duration)}</span><strong class="package-price">From ${escapeHtml(item.price)}</strong></div></div></article>`;
   }
 
   function filterPackages(packages, filter = 'all', query = '') {
@@ -101,6 +92,11 @@
   function suggestedJourneys(packages, count = 3) {
     const live = (packages || []).filter(item => item.status === 'live');
     return live.filter(item => item.featured).concat(live.filter(item => !item.featured)).slice(0, count);
+  }
+
+  // Plain text links (no photos) for the 404 page.
+  function notFoundLinksHtml(items) {
+    return (items || []).map(item => `<li><a class="nf-link" href="${journeyPath(item)}"><span class="nf-link-title">${escapeHtml(item.title)}</span><span class="nf-link-meta">${escapeHtml(item.duration)} · from ${escapeHtml(item.price)}</span><span class="icon icon-arrow" aria-hidden="true"></span></a></li>`).join('');
   }
 
   function destinationsHtml(packages) {
@@ -118,8 +114,7 @@
 
   function testimonialHtml(item) {
     if (!item) return '';
-    const rating = Math.max(1, Math.min(5, Number(item.rating) || 5));
-    return `<blockquote class="testimonial-quote">“${escapeHtml(item.quote)}”</blockquote><div class="testimonial-side"><strong>${escapeHtml(item.name)}</strong><span>${escapeHtml(item.location)}</span><span class="testimonial-rating" aria-label="${rating} out of 5 stars">${'★'.repeat(rating)}</span></div>`;
+    return `<div class="testimonial-quote">“${escapeHtml(item.quote)}”</div><div class="testimonial-side"><strong>${escapeHtml(item.name)}</strong><span>${escapeHtml(item.location)}</span><span class="testimonial-rating">${'★'.repeat(item.rating || 5)}</span></div>`;
   }
 
   function whatsappTripLink(item, settings) {
@@ -129,24 +124,28 @@
   }
 
   // Inner markup of the journey dialog (.package-modal).
-  function journeyDialogHtml(item, settings, photoIndex = 0) {
+  // Original journey popup markup; added only the "What's included" section.
+  function journeyDialogHtml(item, settings) {
     const photos = photosOf(item);
-    const current = photos[photoIndex] || photos[0] || '';
-    const thumbs = photos.length > 1 ? `<div class="modal-gallery-thumbs">${photos.map((url, index) => `<button type="button" data-gallery-image="${index}" class="gallery-thumb ${index === photoIndex ? 'active' : ''}" aria-label="Show photo ${index + 1}" aria-pressed="${index === photoIndex}" style="background-image:url('${cssUrl(url)}')"></button>`).join('')}</div>` : '';
-    const credit = item.photoCredit ? `<small class="modal-photo-credit">Photo: ${item.photoCreditUrl ? `<a href="${escapeHtml(item.photoCreditUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.photoCredit)}</a>` : escapeHtml(item.photoCredit)}</small>` : '';
-    return `<a class="modal-close" href="/#packages" data-close-modal aria-label="Close journey details">×</a>`
-      + `<div class="modal-gallery">${current ? `<img class="modal-image" id="modalImage" src="${escapeHtml(current)}" alt="${escapeHtml(`${shortTitle(item)}, ${item.location || 'Kashmir'}`)}" width="800" height="600">` : '<div class="modal-image"></div>'}${thumbs}${credit}</div>`
-      + `<div class="modal-body"><span class="kicker">${escapeHtml(item.tag || 'Featured journey')}</span><h2 id="modalTitle">${escapeHtml(item.title)}</h2>`
-      + `<div class="modal-meta">${escapeHtml(item.location)} · ${escapeHtml(item.duration)} · from ${escapeHtml(item.price)}</div>`
-      + `<p>${escapeHtml(item.description)}</p>${includesSectionHtml(item)}`
-      + `<a class="button button-dark package-whatsapp" href="${escapeHtml(whatsappTripLink(item, settings))}" target="_blank" rel="noopener noreferrer">Make this my trip <span class="icon icon-arrow" aria-hidden="true"></span></a>`
+    const thumbs = photos.length > 1 ? photos.map((url, index) => `<button type="button" data-gallery-image="${index}" class="gallery-thumb ${index === 0 ? 'active' : ''}" aria-label="Show photo ${index + 1}" style="background-image:url('${cssUrl(url)}')"></button>`).join('') : '';
+    const credit = item.photoCredit
+      ? `<small class="modal-photo-credit" id="modalPhotoCredit">${item.photoCreditUrl ? `Photo: <a href="${escapeHtml(item.photoCreditUrl)}" target="_blank" rel="noreferrer">${escapeHtml(item.photoCredit)}</a>` : `Photo: ${escapeHtml(item.photoCredit)}`}</small>`
+      : '<small class="modal-photo-credit" id="modalPhotoCredit" hidden></small>';
+    return `<button class="modal-close" data-close-modal aria-label="Close">×</button>`
+      + `<div class="modal-gallery"><div class="modal-image" id="modalImage" role="img" aria-label="${escapeHtml(`${shortTitle(item)}, ${item.location || 'Kashmir'}`)}" style="background-image:url('${cssUrl(photos[0] || '')}')"></div><div class="modal-gallery-thumbs" id="modalGalleryThumbs">${thumbs}</div>${credit}</div>`
+      + `<div class="modal-body"><span class="kicker" id="modalCategory">${escapeHtml(item.tag)}</span><h2 id="modalTitle">${escapeHtml(item.title)}</h2>`
+      + `<div class="modal-meta" id="modalMeta">${escapeHtml(item.location)} · ${escapeHtml(item.duration)} · from ${escapeHtml(item.price)}</div>`
+      + `<p id="modalDescription">${escapeHtml(item.description)}</p>`
+      + `<div class="modal-includes"><span><i aria-hidden="true"></i>Handpicked stays</span><span><i aria-hidden="true"></i>Private transfers</span><span><i aria-hidden="true"></i>Local support</span></div>`
+      + includesSectionHtml(item)
+      + `<a class="button button-dark package-whatsapp" id="packageWhatsapp" href="${escapeHtml(whatsappTripLink(item, settings))}" target="_blank" rel="noreferrer">Make this my trip <span class="icon icon-arrow" aria-hidden="true"></span></a>`
       + `<small class="modal-note">Opens WhatsApp with this journey's details ready to send.</small></div>`;
   }
 
   return {
     escapeHtml, cssUrl, slugify, journeySlug, journeyPath, findJourney, photosOf, shortTitle, initials,
-    heroTitleHtml, heroTitleText, INCLUDE_TYPES, includeIcon, includesOf, inclusionsOf, cardIncludesHtml,
-    includesSectionHtml, packageCardHtml, filterPackages, suggestedJourneys, destinationsHtml, leadersHtml, testimonialHtml,
+    heroTitleHtml, INCLUDE_TYPES, includeIcon, includesOf, inclusionsOf, cardIncludesHtml,
+    includesSectionHtml, packageCardHtml, filterPackages, suggestedJourneys, notFoundLinksHtml, destinationsHtml, leadersHtml, testimonialHtml,
     whatsappTripLink, journeyDialogHtml
   };
 }));
