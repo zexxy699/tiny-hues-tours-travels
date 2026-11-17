@@ -803,3 +803,32 @@ body:not(.admin-page) .footer-utility button{padding:0;background:transparent;co
   body:not(.admin-page) .location-float{width:46.5px!important;height:46.5px!important}
   body:not(.admin-page) .footer-utility{gap:12px}
 }
+
+/* What's included: icon row on journey cards + panel in the journey details (matches the night-by-night panel). */
+body:not(.admin-page) .card-includes{list-style:none;display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px;padding:0}
+body:not(.admin-page) .card-includes li{display:grid;place-items:center;width:30px;height:30px;border-radius:6px;background:#f2f7fb;border:1px solid #e3edf5}
+body:not(.admin-page) .card-includes .include-icon{width:17px;height:17px}
+.include-icon{width:28px;height:28px;fill:none;stroke:#174c7a;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto}
+.include-icon .ia{stroke:#2e6aa5}
+body:not(.admin-page) .modal-includes-panel h3+ul{margin-bottom:16px}
+body:not(.admin-page) .modal-includes-panel ul:last-child{margin-bottom:0}
+body:not(.admin-page) .include-strip{list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:8px;margin:0;padding:0}
+body:not(.admin-page) .include-strip li{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:76px;padding:10px 4px;border:1px solid #dbe7f1;border-radius:8px;background:#fff;text-align:center;font-size:12px;font-weight:700;line-height:1.2;color:#193f61}
+body:not(.admin-page) .inclusion-list{list-style:none;display:grid;gap:8px;margin:0;padding:0}
+body:not(.admin-page) .inclusion-list li{position:relative;padding-left:24px;font-size:14px;line-height:1.5;color:#193f61}
+body:not(.admin-page) .inclusion-list li:before{content:'';position:absolute;left:0;top:3px;width:15px;height:15px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%232e6aa5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 4l4 4-4 4M9 4l4 4-4 4'/%3E%3C/svg%3E") center/15px no-repeat}
+/* Admin journey editor: "What's included" checkboxes */
+.include-picker{grid-column:1/-1;min-width:0;border:1px solid var(--line);border-radius:8px;padding:10px 14px 14px;margin:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 16px}
+.include-picker legend{padding:0 6px;font-size:13px;font-weight:700}
+.include-picker legend .field-hint{display:block;font-weight:400}
+.admin-form .include-picker .check-row{margin:0;font-weight:500;white-space:nowrap;min-height:28px}
+@media(max-width:720px){.include-picker{grid-template-columns:repeat(2,minmax(0,1fr))}}
+body:not(.admin-page) .modal-includes-panel{width:100%;box-sizing:border-box;margin-top:0}
+body:not(.admin-page) .modal-includes-panel .include-strip li{border-left:1px solid #dbe7f1;padding-left:4px}
+body:not(.admin-page) .modal-includes-panel .inclusion-list li{display:block;border-left:0;padding-left:24px}
+body:not(.admin-page) .modal-includes-panel .include-strip li{font-size:11px;font-weight:600;padding-left:2px;padding-right:2px}
+/* Keep the journey popup (and its close button) on screen now that it can hold more detail. */
+@media(min-width:721px){
+  body:not(.admin-page) .package-modal{max-height:calc(100svh - 50px)}
+  body:not(.admin-page) .modal-body{max-height:calc(100svh - 50px);overflow-y:auto;overscroll-behavior:contain}
+}

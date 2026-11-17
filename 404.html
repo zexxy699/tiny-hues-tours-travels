@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Page not found | Tiny Hues Tours &amp; Travels</title>
+  <meta name="robots" content="noindex, follow" />
+  <meta name="theme-color" content="#174c7a" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="icon" href="/assets/tiny-hues-logo.png" type="image/png" />
+  <style>
+    .nf-main{background:#f5f9fd;padding:80px 0 100px;min-height:calc(100vh - 82px)}
+    .nf-box{max-width:600px;margin:0 auto;text-align:center}
+    .nf-box h1{font-family:'Newsreader',Georgia,serif;font-weight:500;font-size:48px;line-height:1.08;letter-spacing:-.02em;margin:12px 0 14px;color:#112d49}
+    .nf-box>p{margin:0 auto;max-width:440px;color:#4f6a80;font-size:16px;line-height:1.7}
+    .nf-actions{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin-top:28px}
+    .nf-list-wrap{margin-top:48px;text-align:left}
+    .nf-list-wrap[hidden]{display:none}
+    .nf-list-title{display:block;margin-bottom:10px;text-align:center}
+    .nf-list{list-style:none;margin:0;padding:0;background:#fff;border:1px solid #dbe7f1;border-radius:8px;overflow:hidden}
+    .nf-list li+li{border-top:1px solid #dbe7f1}
+    .nf-link{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:15px 18px;color:#112d49;text-decoration:none}
+    .nf-link:hover{background:#f5f9fd}
+    .nf-link-title{font-family:'Newsreader',Georgia,serif;font-size:19px}
+    .nf-link-meta{font-size:13px;color:#536c80;white-space:nowrap}
+    .nf-help{margin-top:24px;text-align:center;font-size:14px;color:#4f6a80}
+    .nf-help a{color:#174c7a;font-weight:700;text-decoration:underline;text-underline-offset:3px}
+    @media(max-width:720px){
+      .nf-main{padding:52px 0 72px}
+      .nf-box h1{font-size:36px}
+      .nf-actions .button{width:100%}
+      .nf-link{flex-direction:column;align-items:flex-start;gap:2px}
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="/" aria-label="Tiny Hues home">
+        <span class="brand-logo"><img src="/assets/tiny-hues-logo.png" alt="Tiny Hues Tours & Travels logo"></span>
+        <span class="brand-copy"><strong>TINY HUES</strong><small>TOURS & TRAVELS</small></span>
+      </a>
+    </div>
+  </header>
+
+  <main class="nf-main">
+    <div class="container nf-box">
+      <span class="kicker">PAGE NOT FOUND</span>
+      <h1>This page could not be found</h1>
+      <p>The link may be old or mistyped. Everything else on the site is right where it was.</p>
+      <div class="nf-actions">
+        <a class="button button-dark" href="/">Back to homepage <span class="icon icon-arrow" aria-hidden="true"></span></a>
+        <a class="button button-outline" href="/#packages">See all journeys</a>
+      </div>
+      <div class="nf-list-wrap" id="nfListWrap">
+        <span class="kicker nf-list-title">POPULAR JOURNEYS</span>
+        <ul class="nf-list" id="notFoundJourneys"><!--journeys--></ul>
+      </div>
+      <p class="nf-help">Need help? <a href="https://wa.me/916005577032" target="_blank" rel="noreferrer">Chat with us on WhatsApp</a></p>
+    </div>
+  </main>
+
+  <script>
+    // For unknown addresses this static page fills the journey list itself.
+    (function () {
+      var list = document.getElementById('notFoundJourneys');
+      var wrap = document.getElementById('nfListWrap');
+      if (!list || list.querySelector('li')) return;
+      function hide() { wrap.hidden = true; }
+      function esc(v) { return String(v || '').replace(/[&<>'"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[c]; }); }
+      function slug(item) { return item.slug || String(item.title || item.id).toLowerCase().replace(/&/g, ' and ').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 80) || item.id; }
+      fetch('/api/content').then(function (r) { return r.ok ? r.json() : null; }).then(function (result) {
+        var packages = (result && result.content && result.content.packages) || [];
+        var picks = packages.filter(function (p) { return p.featured; }).concat(packages.filter(function (p) { return !p.featured; })).slice(0, 4);
+        if (!picks.length) return hide();
+        list.innerHTML = picks.map(function (p) {
+          return '<li><a class="nf-link" href="/journeys/' + encodeURIComponent(slug(p)) + '"><span class="nf-link-title">' + esc(p.title) + '</span><span class="nf-link-meta">' + esc(p.duration) + '</span></a></li>';
+        }).join('');
+      }).catch(hide);
+    }());
+  </script>
+</body>
+</html>

@@ -17,3 +17,11 @@ Social links are editable in Admin → Site settings. The default Instagram and 
 The public site includes a floating WhatsApp shortcut, cookie consent, executive leadership content, tap-to-open journey cards, and WhatsApp trip handoff links with the selected journey details. Primary helpline and WhatsApp: `+91 6006473963`; secondary desk: `+91 6005577032`. Both details and leadership bios are editable in Admin → Site settings.
 
 The six added Kashmir destination photographs include linked author/license credit in each journey detail view. Credits are stored with each journey so they can be updated when a photo is replaced.
+
+## Added on 17 Nov
+
+- **What's included:** each journey can show icons (Sightseeing, Meals, Hotels, Transfers, Houseboat, Local guide) on its card and a "What's included / Package inclusions" panel under the night-by-night plan. Edit them in Admin → Journeys → edit.
+- **Journey addresses:** each journey has its own link, e.g. `/journeys/kashmir-in-full-colour`, which opens that journey's details. The link stays the same if the journey is renamed.
+- **SEO:** `/` and journey links are served by `api/home.js`, which only rewrites the page `<head>` (title, description, canonical, share tags, structured data); the visible page is `outputs/index.html` unchanged. Also `robots.txt`, `/sitemap.xml` and a simple `404.html`.
+- **Enquiries:** deleting or changing an enquiry uses `/api/inquiry` (DELETE/PATCH), and all saves use conditional writes, so simultaneous saves can't overwrite each other and deleted enquiries don't come back.
+- Tests: `npm test`.

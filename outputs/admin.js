@@ -4,6 +4,8 @@ let bookingFilter = 'all';
 let editingPackageId = null;
 let editingTestimonialId = null;
 let saveQueue = Promise.resolve();
+const INCLUDE_OPTIONS = [['sightseeing','Sightseeing'],['meals','Meals'],['hotels','Hotels'],['transfer','Transfers'],['houseboat','Houseboat'],['guide','Local guide']];
+const slugify = value => String(value || '').normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/&/g, ' and ').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 80);
 
 const clone = value => JSON.parse(JSON.stringify(value));
 const e = (value = '') => String(value).replace(/[&<>\'"]/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' }[char]));
@@ -25,7 +27,8 @@ async function loadAdminData() {
 
 function saveAdminData() {
   const snapshot = JSON.stringify(adminData);
-  saveQueue = saveQueue.catch(() => {}).then(() => api('/api/content', { method: 'POST', body: JSON.stringify({ content: JSON.parse(snapshot) }) }));
+  const { bookings, ...content } = JSON.parse(snapshot);
+  saveQueue = saveQueue.catch(() => {}).then(() => api('/api/content', { method: 'POST', body: JSON.stringify({ content }) }));
   return saveQueue;
 }
 
@@ -116,6 +119,7 @@ function showAdminModal(type, id = null) {
     packageForm.querySelector('[name="description"]')?.closest('label')?.remove();
     const photoLabel = packageForm.querySelector('[name="images"]')?.closest('label');
     photoLabel?.insertAdjacentHTML('beforebegin', `<div class="itinerary-editor span-2"><div class="itinerary-editor-heading"><span><strong>Overnight stays & route</strong><small>One row for each place guests sleep. Night totals must match the trip duration.</small></span><button type="button" class="button button-outline" id="addItineraryStop">+ Add stop</button></div><div id="itineraryRows"></div><p class="itinerary-night-total" id="itineraryNightTotal" aria-live="polite"></p></div><label>Pickup point<input name="pickupPoint" value="${e(item.pickupPoint || '')}" placeholder="e.g. Srinagar Airport"></label><label>Drop-off point<input name="dropoffPoint" value="${e(item.dropoffPoint || '')}" placeholder="e.g. Srinagar Airport"></label>`);
+    photoLabel?.insertAdjacentHTML('beforebegin', `<fieldset class="span-2 include-picker"><legend>What's included <small class="field-hint">Shown as icons on the journey card and in the journey details.</small></legend>${INCLUDE_OPTIONS.map(([key, label]) => `<label class="check-row"><input type="checkbox" name="includes" value="${key}" ${(item.includes || []).includes(key) ? 'checked' : ''}> ${label}</label>`).join('')}</fieldset><label class="span-2">Package inclusions <small class="field-hint">One per line, e.g. “Stay in deluxe hotels”.</small><textarea name="inclusions" rows="5" placeholder="Sightseeing in a private car&#10;Stay in deluxe hotels&#10;One night on a Dal Lake houseboat">${e((item.inclusions || []).join('\n'))}</textarea></label>`);
     renderItineraryRows(item.itinerary || []);
     packageForm.querySelector('[name="duration"]')?.addEventListener('input', refreshItineraryTotal);
     document.getElementById('addItineraryStop')?.addEventListener('click', () => addItineraryRow());
@@ -194,6 +198,7 @@ async function savePackage(event) {
   button.disabled = true;
   const urls = String(form.get('images') || '').split('\n').map(url => url.trim()).filter(url => /^https:\/\//i.test(url) || url.startsWith('/api/media?path='));
   try {
+    const existing = editingPackageId ? adminData.packages.find(entry => entry.id === editingPackageId) : null;
     const files = Array.from(formElement.elements.photoFiles.files || []);
     for (let index = 0; index < files.length; index += 1) {
       button.innerHTML = `Uploading photo ${index + 1} of ${files.length} <span>…</span>`;
@@ -203,6 +208,10 @@ async function savePackage(event) {
       id:editingPackageId || `p-${crypto.randomUUID()}`,
       title:String(form.get('title')).trim(), tag:String(form.get('tag')).trim(), location:String(form.get('location')).trim(), duration:String(form.get('duration')).trim(), price:String(form.get('price')).trim(), category:String(form.get('category')), image:urls[0] || '', images:urls, status:String(form.get('status')), featured:form.get('featured') === 'on', showInDestinations:form.get('showInDestinations') === 'on', pickupPoint:String(form.get('pickupPoint') || '').trim(), dropoffPoint:String(form.get('dropoffPoint') || '').trim(), itinerary:[...document.querySelectorAll('#itineraryRows .itinerary-row')].map(row => ({ nights:Number(row.querySelector('[name="stopNights"]').value), stay:String(row.querySelector('[name="stopStay"]').value).trim(), details:String(row.querySelector('[name="stopDetails"]').value).trim() }))
     };
+    item.includes = form.getAll('includes').map(String);
+    item.inclusions = String(form.get('inclusions') || '').split('\n').map(line => line.trim()).filter(Boolean).slice(0, 20);
+    // Keep the journey's web address the same even if its name is edited later.
+    item.slug = existing?.slug || slugify(existing?.title || item.title) || undefined;
     if (!item.title || !item.location || !item.duration || !item.price) throw new Error('Add a journey name, location, duration and price.');
     const expectedNights = Number(item.duration.match(/(\d+)\s*nights?/i)?.[1] || 0);
     const plannedNights = item.itinerary.reduce((sum, stop) => sum + (Number(stop.nights) || 0), 0);
@@ -292,8 +301,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     const deleteBooking = event.target.closest('[data-delete-booking]')?.dataset.deleteBooking;
     if (deleteBooking && confirm('Delete this enquiry?')) {
-      const previous = clone(adminData); adminData.bookings = adminData.bookings.filter(item => item.id !== deleteBooking);
-      if (!await persist('Enquiry deleted')) adminData = previous;
+      try {
+        await api(`/api/inquiry?id=${encodeURIComponent(deleteBooking)}`, { method:'DELETE' });
+        adminData.bookings = adminData.bookings.filter(item => item.id !== deleteBooking);
+        toast('Enquiry deleted');
+      } catch (error) { toast(`Delete failed: ${error.message}`); }
       renderBookingsTable(); renderDashboard();
     }
     if (event.target.closest('[data-close-admin-modal]')) closeAdminModal();
@@ -309,8 +321,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     const id = event.target.dataset.bookingStatus;
     const item = adminData?.bookings.find(booking => booking.id === id);
     if (!item) return;
-    const previous = item.status; item.status = event.target.value;
-    if (!await persist('Enquiry status updated')) item.status = previous;
+    try {
+      await api('/api/inquiry', { method:'PATCH', body:JSON.stringify({ id, status:event.target.value }) });
+      item.status = event.target.value; toast('Enquiry status updated');
+    } catch (error) { toast(`Update failed: ${error.message}`); }
     renderBookingsTable(); renderDashboard();
   });
 
@@ -350,12 +364,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   document.getElementById('resetDemo').addEventListener('click', async () => {
-    if (!confirm('Reset all website content and journeys to the original demo data?')) return;
+    const answer = prompt('This replaces ALL live journeys, reviews and site settings with the original demo content. Enquiries are kept.\n\nType RESET to continue.');
+    if (String(answer || '').trim().toUpperCase() !== 'RESET') return;
     const previous = clone(adminData);
     try {
       const response = await fetch('/data/site-content.json', { cache:'no-store' });
       if (!response.ok) throw new Error('Could not load the starting content.');
-      adminData = await response.json();
+      adminData = { ...(await response.json()), bookings: previous.bookings };
       if (!await persist('Demo content reset and published')) adminData = previous;
       populateSettings(); navigate('dashboard');
     } catch (error) { adminData = previous; toast(error.message); }

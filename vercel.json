@@ -1,29 +1,100 @@
 {
   "functions": {
     "api/**/*.js": {
-      "regions": ["bom1"]
+      "regions": [
+        "bom1"
+      ],
+      "includeFiles": "outputs/index.html"
     }
   },
   "rewrites": [
-    { "source": "/", "destination": "/outputs/index.html" },
-    { "source": "/styles.css", "destination": "/outputs/styles.css" },
-    { "source": "/app.js", "destination": "/outputs/app.js" },
-    { "source": "/admin.js", "destination": "/outputs/admin.js" },
-    { "source": "/adminapage", "destination": "/outputs/admin.html" },
-    { "source": "/adminapage/", "destination": "/outputs/admin.html" },
-    { "source": "/assets/:path*", "destination": "/outputs/assets/:path*" }
+    {
+      "source": "/",
+      "destination": "/api/home"
+    },
+    {
+      "source": "/journeys/:slug",
+      "destination": "/api/home?journey=:slug"
+    },
+    {
+      "source": "/sitemap.xml",
+      "destination": "/api/sitemap"
+    },
+    {
+      "source": "/styles.css",
+      "destination": "/outputs/styles.css"
+    },
+    {
+      "source": "/app.js",
+      "destination": "/outputs/app.js"
+    },
+    {
+      "source": "/admin.js",
+      "destination": "/outputs/admin.js"
+    },
+    {
+      "source": "/adminapage",
+      "destination": "/outputs/admin.html"
+    },
+    {
+      "source": "/adminapage/",
+      "destination": "/outputs/admin.html"
+    },
+    {
+      "source": "/assets/:path*",
+      "destination": "/outputs/assets/:path*"
+    }
   ],
   "headers": [
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
-        { "key": "Strict-Transport-Security", "value": "max-age=31536000; includeSubDomains" },
-        { "key": "X-Frame-Options", "value": "DENY" },
-        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" },
-        { "key": "X-Permitted-Cross-Domain-Policies", "value": "none" }
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=31536000; includeSubDomains"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=()"
+        },
+        {
+          "key": "X-Permitted-Cross-Domain-Policies",
+          "value": "none"
+        }
       ]
+    },
+    {
+      "source": "/adminapage(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/journeys/:slug/",
+      "destination": "/journeys/:slug",
+      "permanent": true
+    },
+    {
+      "source": "/journeys",
+      "destination": "/#packages",
+      "permanent": false
     }
   ]
 }

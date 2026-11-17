@@ -1,14 +1,5 @@
 const { hasAdminSession, isSameOriginRequest } = require('../lib/auth');
-const { readSiteData, saveSiteData, readBody } = require('../lib/site-data');
-
-function mergeBookings(current, incoming) {
-  const newer = Array.isArray(current) ? current : [];
-  const edited = Array.isArray(incoming) ? incoming : [];
-  const editedById = new Map(edited.map(item => [item.id, item]));
-  const merged = newer.map(item => editedById.has(item.id) ? { ...item, ...editedById.get(item.id) } : item);
-  const known = new Set(newer.map(item => item.id));
-  return [...merged, ...edited.filter(item => item.id && !known.has(item.id))].slice(0, 500);
-}
+const { readSiteData, updateSiteData, readBody } = require('../lib/site-data');
 
 module.exports = async function handler(req, res) {
   res.setHeader('X-Content-Type-Options', 'nosniff');
@@ -49,13 +40,9 @@ module.exports = async function handler(req, res) {
   next.settings.metaPixelId = pixelId;
 
   try {
-    const current = await readSiteData();
-    const content = {
-      ...next,
-      bookings: mergeBookings(current.bookings, next.bookings),
-      updatedAt: new Date().toISOString()
-    };
-    await saveSiteData(content);
+    // Enquiries are only changed through /api/inquiry, so publishing content can
+    // never drop a new enquiry or bring back a deleted one.
+    const content = await updateSiteData(current => ({ ...next, bookings: current.bookings || [], contentRevision: current.contentRevision }));
     return res.status(200).json({ ok: true, updatedAt: content.updatedAt });
   } catch (error) {
     console.error('Site content save failed', error);

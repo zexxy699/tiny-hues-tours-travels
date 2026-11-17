@@ -1,5 +1,32 @@
-const { hasAdminSession } = require('../lib/auth');
-const { readSiteData, saveSiteData, readBody } = require('../lib/site-data');
+const { hasAdminSession, isSameOriginRequest } = require('../lib/auth');
+const { readSiteData, updateSiteData, readBody } = require('../lib/site-data');
+
+const STATUSES = new Set(['new', 'in-progress', 'booked', 'closed']);
+
+// Admin: change an enquiry's status (PATCH) or delete it (DELETE).
+async function handleAdminChange(req, res) {
+  res.setHeader('Cache-Control', 'private, no-store');
+  if (!hasAdminSession(req)) return res.status(401).json({ error: 'Please sign in to manage enquiries.' });
+  if (!isSameOriginRequest(req)) return res.status(403).json({ error: 'This request did not come from the Tiny Hues admin site.' });
+  const body = readBody(req);
+  const id = String(req.query?.id || body.id || '');
+  if (!id) return res.status(400).json({ error: 'Missing enquiry id.' });
+  const status = String(body.status || '');
+  if (req.method === 'PATCH' && !STATUSES.has(status)) return res.status(400).json({ error: 'Unknown status.' });
+  let found = false;
+  try {
+    await updateSiteData(content => {
+      const bookings = Array.isArray(content.bookings) ? content.bookings : [];
+      found = bookings.some(item => item.id === id);
+      content.bookings = req.method === 'DELETE' ? bookings.filter(item => item.id !== id) : bookings.map(item => item.id === id ? { ...item, status } : item);
+      return content;
+    });
+  } catch (error) {
+    console.error('Enquiry update failed', error);
+    return res.status(503).json({ error: 'The enquiry inbox is temporarily unavailable. Please try again.' });
+  }
+  return found ? res.status(200).json({ ok: true }) : res.status(404).json({ error: 'That enquiry no longer exists.' });
+}
 
 const WINDOW_MS = 60 * 60 * 1000;
 const MAX_REQUESTS = 20;
@@ -25,12 +52,14 @@ module.exports = async function handler(req, res) {
       return res.status(503).json({ error: 'The enquiry inbox is temporarily unavailable.' });
     }
   }
+  if (req.method === 'DELETE' || req.method === 'PATCH') return handleAdminChange(req, res);
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   const body = readBody(req);
-  if (body.website) return res.status(200).json({ ok: true });
-
   const now = Date.now();
+  // Bots: hidden honeypot field filled, or the form sent faster than a person could fill it.
+  const startedAt = Number(body.startedAt);
+  if (body.website || (Number.isFinite(startedAt) && startedAt > 0 && now - startedAt < 2500)) return res.status(200).json({ ok: true });
   for (const [attemptKey, attempt] of limiter) {
     if (now - attempt.startedAt >= WINDOW_MS) limiter.delete(attemptKey);
   }
@@ -72,9 +101,10 @@ module.exports = async function handler(req, res) {
   };
 
   try {
-    const content = await readSiteData();
-    content.bookings = [inquiry, ...(content.bookings || [])].slice(0, 500);
-    await saveSiteData(content);
+    await updateSiteData(content => {
+      content.bookings = [inquiry, ...(content.bookings || [])].slice(0, 500);
+      return content;
+    });
     record.count += 1;
     limiter.set(key, record);
     return res.status(200).json({ ok: true, message: 'Enquiry received', inquiry });

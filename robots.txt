@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /adminapage
+Disallow: /api/
+Allow: /api/media
+
+Sitemap: https://www.tinyhuestour.com/sitemap.xml

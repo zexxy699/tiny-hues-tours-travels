@@ -121,7 +121,50 @@ Object.assign(defaultData.packages.find(item => item.id === 'p5'), {
 
 function escapeHtml(value = '') { return String(value).replace(/[&<>'"]/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' }[char])); }
 
+/* ---------- What's included (icons + inclusion list) ---------- */
+// Line icons on a 24px grid; `.ia` strokes use the accent colour.
+const INCLUDE_TYPES = [
+  { key: 'sightseeing', label: 'Sightseeing', svg: '<rect x="3" y="7" width="18" height="13" rx="3"/><path d="M8.5 7l1.4-2.5h4.2L15.5 7"/><circle cx="12" cy="13.5" r="3.5"/><circle class="ia" cx="12" cy="13.5" r="1"/><path class="ia" d="M17.5 10.2h.01"/>' },
+  { key: 'meals', label: 'Meals', svg: '<path d="M3.5 4v4a1.75 1.75 0 0 0 3.5 0V4M5.25 4v16"/><circle cx="13.5" cy="12" r="5.2"/><circle class="ia" cx="13.5" cy="12" r="2.4"/><path d="M20.5 20V4c1.3.9 1.9 3.2 1.9 6.5h-1.9"/>' },
+  { key: 'hotels', label: 'Hotels', svg: '<path d="M5 21V5a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v16M3 21h18M10 21v-4h4v4"/><path class="ia" d="M8.5 8h1M14.5 8h1M8.5 12h1M14.5 12h1"/>' },
+  { key: 'transfer', label: 'Transfers', svg: '<path d="M5 11l1.6-4.2A2 2 0 0 1 8.5 5.5h7a2 2 0 0 1 1.9 1.3L19 11"/><rect x="3" y="11" width="18" height="6" rx="2"/><path d="M5.5 17v2.5M18.5 17v2.5"/><path class="ia" d="M7 14h1.5M15.5 14H17"/>' },
+  { key: 'houseboat', label: 'Houseboat', svg: '<path d="M2.5 14h19l-2.2 3.5a2 2 0 0 1-1.7 1H6.4a2 2 0 0 1-1.7-1Z"/><path d="M6 14v-4h12v4M5 10l7-4 7 4"/><path class="ia" d="M3 21.5c1.5 0 1.5-1 3-1s1.5 1 3 1 1.5-1 3-1 1.5 1 3 1 1.5-1 3-1 1.5 1 3 1M9.5 12h1M13.5 12h1"/>' },
+  { key: 'guide', label: 'Local guide', svg: '<circle cx="12" cy="12" r="9"/><path class="ia" d="m15.5 8.5-2 5-5 2 2-5 5-2Z"/>' }
+];
+const INCLUDE_BY_KEY = Object.fromEntries(INCLUDE_TYPES.map(type => [type.key, type]));
+const DEFAULT_INCLUDES = {
+  includes: ['sightseeing', 'meals', 'hotels', 'transfer', 'houseboat'],
+  inclusions: ['Sightseeing in a private car', 'Stay in deluxe hotels', 'One night on a Dal Lake houseboat', 'Daily breakfast and dinner', 'Pickup from Srinagar Airport']
+};
+function includeIcon(key) { const type = INCLUDE_BY_KEY[key]; return type ? `<svg class="include-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">${type.svg}</svg>` : ''; }
+function includesOf(item) { return (Array.isArray(item?.includes) ? item.includes : []).filter(key => INCLUDE_BY_KEY[key]); }
+function inclusionsOf(item) { return (Array.isArray(item?.inclusions) ? item.inclusions : []).map(line => String(line).trim()).filter(Boolean); }
+function cardIncludesHtml(item) {
+  const keys = includesOf(item);
+  if (!keys.length) return '';
+  return `<ul class="card-includes" aria-label="Includes ${escapeHtml(keys.map(key => INCLUDE_BY_KEY[key].label).join(', '))}">${keys.map(key => `<li title="${escapeHtml(INCLUDE_BY_KEY[key].label)}">${includeIcon(key)}</li>`).join('')}</ul>`;
+}
+function includesPanelHtml(item) {
+  const keys = includesOf(item);
+  const lines = inclusionsOf(item);
+  if (!keys.length && !lines.length) return '';
+  return `${keys.length ? `<h3>What's included</h3><ul class="include-strip">${keys.map(key => `<li>${includeIcon(key)}<span>${escapeHtml(INCLUDE_BY_KEY[key].label)}</span></li>`).join('')}</ul>` : ''}${lines.length ? `<h3>Package inclusions</h3><ul class="inclusion-list">${lines.map(line => `<li>${escapeHtml(line)}</li>`).join('')}</ul>` : ''}`;
+}
+
+/* ---------- Shareable journey addresses (/journeys/name) ---------- */
+const HOME_TITLE = document.title;
+function journeySlug(item) {
+  return item.slug || String(item.title || item.id).normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/&/g, ' and ').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 80) || item.id;
+}
+function journeyFromPath() {
+  const match = location.pathname.match(/^\/journeys\/([^/]+)/);
+  if (!match) return null;
+  const key = decodeURIComponent(match[1]).toLowerCase();
+  return data.packages.find(item => item.status !== 'draft' && (journeySlug(item) === key || String(item.id).toLowerCase() === key)) || null;
+}
+
 let data = JSON.parse(JSON.stringify(defaultData));
+data.packages.forEach(item => { if (['p1', 'p3', 'p5'].includes(item.id) && item.includes === undefined) Object.assign(item, JSON.parse(JSON.stringify(DEFAULT_INCLUDES))); });
 let activeFilter = 'all';
 let testimonialIndex = 0;
 let heroSlideTimer = null;
@@ -398,7 +441,7 @@ function renderPackages() {
     const stays = Array.isArray(item.itinerary) ? item.itinerary.filter(stop => stop.stay && Number(stop.nights) > 0) : [];
     const route = stays.map(stop => `${Number(stop.nights)}N ${stop.stay}`).join(' · ');
     const isQuote = /^(get a quote|custom)$/i.test(String(item.price || '').trim());
-    return `<article class="package-card" data-package-id="${escapeHtml(item.id)}" tabindex="0"><div class="package-card-image" style="background-image:url('${escapeHtml(item.image)}')"><span class="package-tag">${escapeHtml(item.tag)}</span><button class="package-card-arrow" data-package-id="${escapeHtml(item.id)}" aria-label="View ${escapeHtml(item.title)}"><span class="icon icon-arrow" aria-hidden="true"></span></button></div><div class="package-info"><h3>${escapeHtml(item.title)}</h3>${route ? `<div class="package-route" aria-label="Suggested overnight stays"><span>SUGGESTED STAYS</span><strong>${escapeHtml(route)}</strong></div>` : ''}<div class="package-bottom"><span class="package-duration">${escapeHtml(item.duration)}</span><strong class="package-price">${isQuote ? 'Get a quote' : `From ${escapeHtml(item.price)}`}</strong></div></div></article>`;
+    return `<article class="package-card" data-package-id="${escapeHtml(item.id)}" tabindex="0"><div class="package-card-image" style="background-image:url('${escapeHtml(item.image)}')"><span class="package-tag">${escapeHtml(item.tag)}</span><button class="package-card-arrow" data-package-id="${escapeHtml(item.id)}" aria-label="View ${escapeHtml(item.title)}"><span class="icon icon-arrow" aria-hidden="true"></span></button></div><div class="package-info"><h3>${escapeHtml(item.title)}</h3>${route ? `<div class="package-route" aria-label="Suggested overnight stays"><span>SUGGESTED STAYS</span><strong>${escapeHtml(route)}</strong></div>` : ''}${cardIncludesHtml(item)}<div class="package-bottom"><span class="package-duration">${escapeHtml(item.duration)}</span><strong class="package-price">${isQuote ? 'Get a quote' : `From ${escapeHtml(item.price)}`}</strong></div></div></article>`;
   }).join('');
   const empty = document.getElementById('emptyPackages');
   if (empty) empty.hidden = visible.length > 0;
@@ -481,7 +524,7 @@ function initTripPlanner() {
   });
 }
 
-function openPackageModal(id) {
+function openPackageModal(id, fromHistory = false) {
   const item = data.packages.find(packageItem => packageItem.id === id);
   if (!item) return;
   trackMetaEvent('ViewContent', { content_name: item.title, content_category: item.category, content_ids: [item.id], content_type: 'product' });
@@ -517,9 +560,14 @@ function openPackageModal(id) {
       itineraryPanel.hidden = false;
     }
   }
+  const includesPanel = document.getElementById('modalIncludes');
+  if (includesPanel) { includesPanel.innerHTML = includesPanelHtml(item); includesPanel.hidden = !includesPanel.innerHTML; }
   updatePackageWhatsapp(item);
   modal.hidden = false;
   document.body.classList.add('modal-open');
+  document.title = `${item.title} – Kashmir Tour Package | Tiny Hues`;
+  const path = `/journeys/${encodeURIComponent(journeySlug(item))}`;
+  if (!fromHistory && location.pathname !== path) history.pushState({ journey: item.id }, '', path);
 }
 function updatePackageWhatsapp(item) {
   const whatsapp = document.getElementById('packageWhatsapp');
@@ -534,7 +582,15 @@ function updatePackageWhatsapp(item) {
   try { const url = new URL(data.settings.whatsapp || CURRENT_WHATSAPP); url.searchParams.set('text', message); whatsapp.href = url.href; }
   catch { whatsapp.href = `${CURRENT_WHATSAPP}?text=${encodeURIComponent(message)}`; }
 }
-function closeModal() { document.getElementById('packageModal').hidden = true; document.body.classList.remove('modal-open'); }
+function closeModal(fromHistory = false) {
+  document.getElementById('packageModal').hidden = true;
+  document.body.classList.remove('modal-open');
+  document.title = HOME_TITLE;
+  if (fromHistory !== true && location.pathname.startsWith('/journeys/')) {
+    if (history.state && history.state.journey) history.back();
+    else history.pushState({}, '', '/#packages');
+  }
+}
 
 function initCookieConsent() {
   const banner = document.getElementById('cookieConsent');
@@ -603,8 +659,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
   document.getElementById('packageGrid')?.addEventListener('keydown', event => { const card = event.target.closest('.package-card'); if (card && (event.key === 'Enter' || event.key === ' ')) { event.preventDefault(); openPackageModal(card.dataset.packageId); } });
-  document.querySelectorAll('[data-close-modal]').forEach(button => button.addEventListener('click', closeModal));
+  document.querySelectorAll('[data-close-modal]').forEach(button => button.addEventListener('click', () => closeModal()));
+  window.addEventListener('popstate', () => { const item = journeyFromPath(); if (item) openPackageModal(item.id, true); else if (!document.getElementById('packageModal').hidden) closeModal(true); });
+  const startJourney = journeyFromPath();
+  if (startJourney) openPackageModal(startJourney.id, true);
+  const inquiryStartedAt = document.querySelector('#inquiryForm [name="startedAt"]');
+  if (inquiryStartedAt) inquiryStartedAt.value = String(Date.now());
   document.getElementById('packageModal')?.addEventListener('click', event => { if (event.target.id === 'packageModal') closeModal(); });
+  document.addEventListener('keydown', event => { if (event.key === 'Escape' && !document.getElementById('packageModal').hidden) closeModal(); });
   document.getElementById('packageModal')?.addEventListener('input', event => {
     if (event.target.id !== 'modalDropoff') return;
     const item = data.packages.find(packageItem => packageItem.id === event.currentTarget.dataset.packageId);
@@ -643,12 +705,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const formSuccess = document.getElementById('formSuccess');
     const rateCheck = canSubmitInquiry();
     if (!rateCheck.allowed) { formSuccess.hidden = false; formSuccess.textContent = rateCheck.message; formSuccess.classList.add('form-error'); return; }
-    const payload = { name: guestName, email: form.get('email'), destination: form.get('destination'), travellers: form.get('travellers'), message: form.get('message'), website: form.get('website') };
+    const payload = { name: guestName, email: form.get('email'), destination: form.get('destination'), travellers: form.get('travellers'), message: form.get('message'), website: form.get('website'), startedAt: form.get('startedAt') };
     const submitButton = inquiryForm.querySelector('button[type="submit"]');
     submitButton.disabled = true; submitButton.innerHTML = 'Sending enquiry <span>…</span>';
     sendInquiry(payload).then(() => {
       trackMetaEvent('Lead', { content_name: 'Custom trip enquiry' });
-      inquiryForm.reset(); formSuccess.textContent = 'Thanks — your enquiry is on its way. Our travel designer will be in touch shortly.'; formSuccess.classList.remove('form-error'); formSuccess.hidden = false;
+      inquiryForm.reset(); if (inquiryForm.elements.startedAt) inquiryForm.elements.startedAt.value = String(Date.now()); formSuccess.textContent = 'Thanks — your enquiry is on its way. Our travel designer will be in touch shortly.'; formSuccess.classList.remove('form-error'); formSuccess.hidden = false;
     }).catch(error => { formSuccess.textContent = error.message; formSuccess.classList.add('form-error'); formSuccess.hidden = false; }).finally(() => { submitButton.disabled = false; submitButton.innerHTML = 'Start a conversation <svg class="button-arrow-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 19 19 5M9 5h10v10" /></svg>'; });
   });
   document.getElementById('footerYear').textContent = new Date().getFullYear();
@@ -661,7 +723,8 @@ document.addEventListener('DOMContentLoaded', () => {
         id: item.id, title: item.title, location: item.location, duration: item.duration,
         price: item.price, category: item.category, tag: item.tag, description: item.description,
         image: item.image, featured: item.featured, status: item.status,
-        showInDestinations: Boolean(item.showInDestinations), itinerary: item.itinerary
+        showInDestinations: Boolean(item.showInDestinations), itinerary: item.itinerary,
+        includes: item.includes, inclusions: item.inclusions
       })),
       testimonials: value.testimonials
     });
@@ -670,6 +733,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!needsRender) return;
     renderSiteSettings(); renderPackages(); renderDestinations(); renderPlannerOptions(); renderInstagramGallery(); renderTestimonial(); renderLeadership();
     startTestimonialRotation();
+    const openId = document.getElementById('packageModal')?.hidden ? null : document.getElementById('packageModal').dataset.packageId;
+    const pathJourney = journeyFromPath();
+    if (openId && data.packages.some(item => item.id === openId)) openPackageModal(openId, true);
+    else if (pathJourney) openPackageModal(pathJourney.id, true);
   }).catch(() => {});
 });
 
