@@ -1,5 +1,5 @@
 const { randomUUID } = require('node:crypto');
-const { hasAdminSession } = require('../lib/auth');
+const { hasAdminSession, isSameOriginRequest } = require('../lib/auth');
 const { readBody } = require('../lib/site-data');
 
 const MAX_FILE_BYTES = 3 * 1024 * 1024;
@@ -10,6 +10,7 @@ module.exports = async function handler(req, res) {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   if (!hasAdminSession(req)) return res.status(401).json({ error: 'Please sign in before uploading photos.' });
+  if (!isSameOriginRequest(req)) return res.status(403).json({ error: 'This upload request did not come from the Tiny Hues admin site.' });
 
   const body = readBody(req);
   const type = String(body.type || '').toLowerCase();

@@ -1,79 +1,19 @@
-# Tiny Hues Tours & Travels website
+# Tiny Hues demo website
 
-Live at **https://tinyhuestour.com** (Vercel). Admin: **/adminapage**.
+Open `index.html` for the public website.
 
-## How it fits together
+The hosted admin route is `/adminapage` (rewritten to `admin.html` by `vercel.json`).
 
-| Path | What it does |
-| --- | --- |
-| `outputs/index.html` | Page template for the public site (placeholders like `{{phone}}` are filled on the server). |
-| `outputs/render.js` | Shared HTML renderers used by both the server and the browser, so both produce the same markup. |
-| `outputs/app.js` | Browser behaviour: filters, search, journey dialog, shareable journey URLs, enquiry form. |
-| `outputs/admin.html`, `outputs/admin.js` | Admin panel. |
-| `api/home.js` | Server-renders `/` and `/journeys/:slug` with live content, SEO tags and structured data. |
-| `api/sitemap.js` | `/sitemap.xml`, listing the homepage and every live journey. |
-| `api/content.js` | Read/publish site content (journeys, testimonials, settings). |
-| `api/inquiry.js` | New enquiries (public) plus inbox, status change and delete (admin). |
-| `api/admin-auth.js`, `api/upload.js`, `api/media.js` | Sign-in, photo upload, photo delivery. |
-| `lib/site-data.js` | Blob storage access, with safe concurrent writes and data migrations. |
-| `lib/seo.js` | Titles, descriptions, Open Graph tags, TravelAgency/TouristTrip JSON-LD. |
-| `data/site-content.json` | Starting content: the single source of default data. |
+Admin access is configured with the Vercel environment variables `TINY_HUES_ADMIN_ID`, `TINY_HUES_ADMIN_PASSWORD`, and `TINY_HUES_SESSION_SECRET`. The admin session is signed server-side and stored in an HttpOnly cookie; credentials are not shipped in the browser bundle.
 
-All content is stored in one private Vercel Blob file (`tiny-hues/site-content.json`). Every write is a
-conditional update (`ifMatch` on the file's ETag) that retries on conflict, so simultaneous enquiries or
-admin saves never overwrite each other. Enquiries are only changed through `/api/inquiry`, so publishing
-content can't bring back a deleted enquiry.
+The admin route is `/adminapage`.
 
-## Journeys
+Journeys, photos, site settings, testimonials, and enquiries are stored in the connected private Vercel Blob store and shared across visitors and devices. Uploaded photos are served through a narrow public image endpoint. Journey cards support multiple image URLs or direct JPEG, PNG, WebP, and AVIF uploads; the first photo is the cover. Photos can be up to 3 MB each.
 
-Each journey has its own web address, e.g. `/journeys/gurez-beyond-the-pass`. Clicking a journey on the
-homepage opens the same details in a dialog and updates the address bar, so the link can be shared.
-A journey keeps its address even if its name is edited later.
+The enquiry endpoint validates submissions and applies a server-side per-instance limit of 20 submissions per hour. The earlier browser-only limit has been removed so old local browser counters cannot block new enquiries.
 
-In **Admin → Journeys → edit**, you can set:
-- **What's included**: icon tiles for Sightseeing, Meals, Hotels, Transfers, Houseboat and Local guide.
-- **Package inclusions**: a bullet list, one line per item.
+Social links are editable in Admin → Site settings. The default Instagram and Facebook buttons open branded public search pages because no verified official social profile URLs were discoverable online; replace them with the company’s exact handles when available.
 
-The inclusions for the original journeys were pre-filled with typical text; check them against what each
-package actually includes.
+The public site includes a floating WhatsApp shortcut, cookie consent, executive leadership content, tap-to-open journey cards, and WhatsApp trip handoff links with the selected journey details. Primary helpline and WhatsApp: `+91 6006473963`; secondary desk: `+91 6005577032`. Both details and leadership bios are editable in Admin → Site settings.
 
-## SEO
-
-- The server renders real HTML for every page, including journeys, prices and contact details, so it
-  doesn't rely on JavaScript running.
-- Each page has its own title, description, canonical URL, Open Graph and Twitter tags. The share image is
-  `outputs/assets/og-image.jpg`.
-- JSON-LD structured data: `TravelAgency` (contact, hours, area served, social profiles), `WebSite`, an
-  `ItemList` of journeys, and on journey pages a `TouristTrip` with an INR `Offer` plus breadcrumbs.
-- `robots.txt` and a dynamic `sitemap.xml`. The admin page is marked `noindex`.
-- The canonical domain is `https://tinyhuestour.com`. To use another domain, set the `SITE_URL`
-  environment variable in Vercel.
-
-**After deploying:**
-1. In Vercel → Domains, make sure `www.tinyhuestour.com` redirects to `tinyhuestour.com` (or the other way
-   round, matching `SITE_URL`).
-2. Add the site to [Google Search Console](https://search.google.com/search-console), verify the
-   domain, and submit `https://tinyhuestour.com/sitemap.xml`.
-3. Create or claim a Google Business Profile for the Srinagar office; for local searches this matters as
-   much as the website.
-
-## Admin access
-
-Set these Vercel environment variables: `TINY_HUES_ADMIN_ID`, `TINY_HUES_ADMIN_PASSWORD`,
-`TINY_HUES_SESSION_SECRET`. Sessions are signed server-side and stored in an HttpOnly cookie.
-
-## Spam protection
-
-Enquiries are dropped when the hidden honeypot field is filled or the form is submitted in under
-2.5 seconds. There is also a per-server limit of 20 enquiries per hour per IP address. That limit lives in
-memory, so for a hard limit, add a rate-limit rule for `/api/inquiry` in **Vercel → Firewall**.
-
-## Development
-
-```bash
-npm install
-npm test
-```
-
-The tests use an in-memory stand-in for Vercel Blob (`tests/blob-mock.js`). They cover concurrent
-enquiries, delete persistence, data migrations, server-rendered SEO output and the sitemap.
+The six added Kashmir destination photographs include linked author/license credit in each journey detail view. Credits are stored with each journey so they can be updated when a photo is replaced.

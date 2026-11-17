@@ -1,4 +1,4 @@
-const { issueSession, clearSession, hasAdminSession, checkCredentials, clientKey } = require('../lib/auth');
+const { issueSession, clearSession, hasAdminSession, checkCredentials, clientKey, isSameOriginRequest } = require('../lib/auth');
 const { readBody } = require('../lib/site-data');
 
 const WINDOW_MS = 15 * 60 * 1000;
@@ -15,12 +15,21 @@ module.exports = async function handler(req, res) {
     return res.status(hasAdminSession(req) ? 200 : 401).json({ authenticated: hasAdminSession(req) });
   }
   if (req.method === 'DELETE') {
+    if (!isSameOriginRequest(req)) return res.status(403).json({ error: 'This sign-out request did not come from the Tiny Hues admin site.' });
     clearSession(res);
     return res.status(200).json({ authenticated: false });
   }
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+  if (!isSameOriginRequest(req)) return res.status(403).json({ error: 'This sign-in request did not come from the Tiny Hues admin site.' });
 
   const now = Date.now();
+  for (const [attemptKey, attempt] of attempts) {
+    if (now - attempt.startedAt >= WINDOW_MS) attempts.delete(attemptKey);
+  }
+  if (attempts.size > 5000) {
+    const oldest = [...attempts.entries()].sort((a, b) => a[1].startedAt - b[1].startedAt).slice(0, attempts.size - 4000);
+    oldest.forEach(([attemptKey]) => attempts.delete(attemptKey));
+  }
   const key = clientKey(req);
   const record = attempts.get(key);
   if (record && now - record.startedAt < WINDOW_MS && record.count >= MAX_ATTEMPTS) {

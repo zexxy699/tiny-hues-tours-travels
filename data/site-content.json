@@ -5,41 +5,185 @@
     "phone": "+91 6006473963",
     "operationsPhone": "+91 6005577032",
     "email": "infotinyhuestourandtravels316@gmail.com",
-    "whatsapp": "https://wa.me/916006473963",
+    "whatsapp": "https://wa.me/916005577032",
+    "whatsappQr": "",
     "contactVersion": "contacts-v2",
-    "instagram": "https://www.instagram.com/tinyhuestourandtravels",
-    "facebook": "https://www.facebook.com/share/1Dn21CtFJ4",
+    "instagram": "https://instagram.com/tinyhuestourandtravels",
+    "reviewsUrl": "https://www.google.com/maps/place/Tinyhuestourandtravels/@34.2719076,74.49347,17z/data=!3m1!4b1!4m6!3m5!1s0x38e109729b9c84e3:0x4d36b86023975e7c!8m2!3d34.2719076!4d74.4960449!16s%2Fg%2F11lymyttj5",
+    "facebook": "",
     "address": "Srinagar, Jammu & Kashmir",
     "hours": "Mon–Sat · 9:30 AM–6:30 PM",
     "heroEyebrow": "Kashmir, thoughtfully arranged",
     "heroTitle": "Go where the quiet lives.",
     "heroSubtitle": "Journeys through Kashmir made personal — from the first cup of kahwa to the last mountain view.",
     "heroImage": "https://images.unsplash.com/photo-1569852837213-00d97a707a83?auto=format&fit=crop&w=2000&q=90",
-    "heroImageVersion": "kashmir-cover-v4",
+    "heroImageVersion": "carousel-v1",
     "leaderOneName": "Aqib Ajaz",
     "leaderOneTitle": "Chief Executive Officer",
     "leaderOneBio": "Spearheading the strategic vision and luxury partnerships at Tiny Hues. Aqib ensures every guest experiences the authentic warmth and majestic charm of Kashmir with ultra-premium comfort.",
     "leaderTwoName": "Umaiq Aijaz",
     "leaderTwoTitle": "Managing Director",
-    "leaderTwoBio": "Directing corporate growth, client relations, and bespoke itinerary standards. Umaiq ensures that Tiny Hues maintains its status as Kashmir's premier trusted travel brand."
+    "leaderTwoBio": "Directing corporate growth, client relations, and bespoke itinerary standards. Umaiq ensures that Tiny Hues maintains its status as Kashmir's premier trusted travel brand.",
+    "heroImages": [
+      "https://images.unsplash.com/photo-1569852837213-00d97a707a83?auto=format&fit=crop&w=2000&q=90",
+      "https://images.unsplash.com/photo-1730898749795-be8eb5a48ea7?auto=format&fit=crop&crop=entropy&w=2200&q=85",
+      "https://images.unsplash.com/photo-1721195807634-82e30d4196c4?auto=format&fit=crop&crop=entropy&w=2200&q=85",
+      "https://images.unsplash.com/photo-1671034195878-468498953cf1?auto=format&fit=crop&crop=entropy&w=2200&q=85",
+      "https://images.unsplash.com/photo-1771098524443-a8384b118ca5?auto=format&fit=crop&crop=entropy&w=2200&q=85"
+    ],
+    "salesManagerOneName": "Musaib Hassan",
+    "salesManagerTwoName": "Rubina Akhtar",
+    "salesManagerThreeName": "Snober Nabi",
+    "reviewRating": "4.8",
+    "reviewCount": "24",
+    "officeMapUrl": "https://maps.app.goo.gl/c5jALxWHa2rcDN8h6",
+    "officeMapEmbed": "https://www.openstreetmap.org/export/embed.html?bbox=74.482,34.266,74.510,34.278&layer=mapnik&marker=34.2719076,74.4960449",
+    "salesManagerOneTitle": "Reservation Manager",
+    "metaPixelId": ""
   },
   "packages": [
-    {"id": "p1", "title": "Kashmir, in full colour", "location": "Srinagar · Gulmarg · Pahalgam", "duration": "5 nights · 6 days", "price": "₹18,999", "category": "valley", "tag": "Signature", "description": "A gentle first taste of Kashmir: floating breakfasts, meadows in bloom and unhurried days between Srinagar, Gulmarg and Pahalgam.", "image": "https://images.unsplash.com/photo-1569852837213-00d97a707a83?auto=format&fit=crop&w=900&q=85", "images": ["https://images.unsplash.com/photo-1569852837213-00d97a707a83?auto=format&fit=crop&w=1200&q=85"], "featured": true, "status": "live", "showInDestinations": false, "includes": ["sightseeing", "meals", "hotels", "transfer", "houseboat"], "inclusions": ["Sightseeing in a private car", "Stay in deluxe hotels in Gulmarg and Pahalgam", "One night on a Dal Lake houseboat", "Daily breakfast and dinner", "Srinagar airport pickup and drop"]},
-    {"id": "p2", "title": "The high road", "location": "Srinagar · Kargil · Leh", "duration": "10 nights · 11 days", "price": "₹42,500", "category": "mountains", "tag": "Adventure", "description": "Take the long way over the Himalayas with dramatic passes, quiet monasteries and the unforgettable blue of Pangong Lake.", "image": "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=900&q=85", "images": ["https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=85"], "featured": true, "status": "live", "showInDestinations": false, "includes": ["sightseeing", "meals", "hotels", "transfer"], "inclusions": ["Sightseeing in a private car for the whole route", "Stay in deluxe hotels along the way", "Daily breakfast and dinner", "Airport pickup and drop"]},
-    {"id": "p3", "title": "A softer kind of north", "location": "Srinagar · Sonamarg · Doodhpathri", "duration": "4 nights · 5 days", "price": "₹15,500", "category": "valley", "tag": "Slow escape", "description": "For travellers who want less road and more room to breathe, with meadows, forest walks and long evenings by the lake.", "image": "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=900&q=85", "images": ["https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1200&q=85"], "featured": true, "status": "live", "showInDestinations": false, "includes": ["sightseeing", "meals", "hotels", "transfer", "houseboat"], "inclusions": ["Sightseeing in a private car", "Stay in a deluxe hotel in Sonamarg", "One night on a Dal Lake houseboat", "Daily breakfast and dinner", "Srinagar airport pickup and drop"]},
-    {"id": "p4", "title": "The soulful circuit", "location": "Jammu · Katra · Srinagar", "duration": "9 nights · 10 days", "price": "₹27,800", "category": "spiritual", "tag": "Meaningful", "description": "A considered journey from Vaishno Devi to the valley, balancing sacred places, local food and quiet moments of reflection.", "image": "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=900&q=85", "images": ["https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=1200&q=85"], "featured": false, "status": "live", "showInDestinations": false, "includes": ["sightseeing", "meals", "hotels", "transfer"], "inclusions": ["Sightseeing in a private car", "Stay in deluxe hotels in Katra and Srinagar", "Daily breakfast and dinner", "Jammu airport or railway station pickup", "Srinagar airport drop"]},
-    {"id": "p5", "title": "Winter, warmly", "location": "Srinagar · Gulmarg", "duration": "4 nights · 5 days", "price": "₹22,900", "category": "mountains", "tag": "Seasonal", "description": "Snow underfoot, kahwa in hand. A cosy winter stay with a day on the slopes and the valley at its quietest.", "image": "https://images.unsplash.com/photo-1517299321609-52687d1bc55a?auto=format&fit=crop&w=900&q=85", "images": ["https://images.unsplash.com/photo-1517299321609-52687d1bc55a?auto=format&fit=crop&w=1200&q=85"], "featured": false, "status": "draft", "showInDestinations": false, "includes": ["sightseeing", "meals", "hotels", "transfer"], "inclusions": ["Sightseeing in a private car", "Stay in a cosy hotel in Gulmarg", "Daily breakfast and dinner", "Srinagar airport pickup and drop"]},
-    {"id": "p6", "title": "Build your own Kashmir", "location": "Anywhere in the valley", "duration": "Made around you", "price": "Custom", "category": "all", "tag": "Bespoke", "description": "Tell us how you like to travel and we will shape the route, stays and small surprises around you.", "image": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=85", "images": ["https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=85"], "featured": false, "status": "live", "showInDestinations": false, "includes": ["sightseeing", "hotels", "transfer", "houseboat", "guide"], "inclusions": ["A route planned around your dates and pace", "Choose your stays: hotels, cottages or a houseboat", "Private car for every transfer", "One local contact throughout your trip"]},
-    {"id": "sonamarg", "title": "Sonamarg · Meadow of Gold", "location": "Sonamarg · Thajiwas · Sindh River", "duration": "2 nights · 3 days", "price": "₹19,999", "category": "mountains", "tag": "Alpine escape", "description": "Follow the Sindh River into wide mountain meadows, with time for the Thajiwas landscape, local stops and a slow evening beneath the peaks.", "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Sonamarg%2C%20jammu%20and%20kashmir.jpg?width=1200", "images": ["https://commons.wikimedia.org/wiki/Special:FilePath/Sonamarg%2C%20jammu%20and%20kashmir.jpg?width=1200"], "photoCredit": "Rayeesmaqboolkashmir · CC BY-SA 4.0", "photoCreditUrl": "https://commons.wikimedia.org/wiki/File:Sonamarg,_jammu_and_kashmir.jpg", "featured": true, "status": "live", "showInDestinations": true, "includes": ["sightseeing", "meals", "hotels", "transfer"], "inclusions": ["Sightseeing in a private car", "Stay in a handpicked hotel in Sonamarg", "Daily breakfast and dinner", "Pickup and drop from Srinagar"]},
-    {"id": "gurez", "title": "Gurez · Beyond the Pass", "location": "Dawar · Habba Khatoon · Kishanganga", "duration": "3 nights · 4 days", "price": "₹19,999", "category": "mountains", "tag": "Off the map", "description": "A quieter northern journey through Gurez's riverside villages, open valley views and the striking profile of Habba Khatoon peak.", "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Gurez%20Valley%2003.jpg?width=1200", "images": ["https://commons.wikimedia.org/wiki/Special:FilePath/Gurez%20Valley%2003.jpg?width=1200"], "photoCredit": "Journo Mohsin · CC BY-SA 4.0", "photoCreditUrl": "https://commons.wikimedia.org/wiki/File:Gurez_Valley_03.jpg", "featured": true, "status": "live", "showInDestinations": true, "includes": ["sightseeing", "meals", "hotels", "transfer"], "inclusions": ["Sightseeing in a private car", "Stay in a handpicked hotel in Gurez", "Daily breakfast and dinner", "Pickup and drop from Srinagar"]},
-    {"id": "daksum", "title": "Daksum · Under the Pines", "location": "Daksum · Bringi River · Anantnag", "duration": "2 nights · 3 days", "price": "₹19,999", "category": "valley", "tag": "Forest retreat", "description": "A forest-side escape shaped around the Bringi stream, wooded walks and an easy pace in the cool green hills of Daksum.", "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Stream%20at%20Daksum%20(14387677438).jpg?width=1200", "images": ["https://commons.wikimedia.org/wiki/Special:FilePath/Stream%20at%20Daksum%20(14387677438).jpg?width=1200"], "photoCredit": "Mike Prince · CC BY 2.0", "photoCreditUrl": "https://commons.wikimedia.org/wiki/File:Stream_at_Daksum_(14387677438).jpg", "featured": false, "status": "live", "showInDestinations": true, "includes": ["sightseeing", "meals", "hotels", "transfer"], "inclusions": ["Sightseeing in a private car", "Stay in a handpicked hotel in Daksum", "Daily breakfast and dinner", "Pickup and drop from Srinagar"]},
-    {"id": "doodhpathri", "title": "Doodhpathri · Meadow Days", "location": "Doodhpathri · Shaliganga · Budgam", "duration": "2 nights · 3 days", "price": "₹19,999", "category": "valley", "tag": "Meadow escape", "description": "Spend unhurried time among open grasslands, winding meadow roads and pine-covered slopes in the Budgam highlands.", "image": "https://upload.wikimedia.org/wikipedia/commons/f/f2/Doodhpathri_-_A_dirt_road_goes_through_the_many_meadows_southwest_Jammu_Kashmir_India.jpg", "images": ["https://upload.wikimedia.org/wikipedia/commons/f/f2/Doodhpathri_-_A_dirt_road_goes_through_the_many_meadows_southwest_Jammu_Kashmir_India.jpg"], "photoCredit": "Ankur P · CC BY-SA 2.0", "photoCreditUrl": "https://commons.wikimedia.org/wiki/File:Doodhpathri_-_A_dirt_road_goes_through_the_many_meadows_southwest_Jammu_Kashmir_India.jpg", "featured": true, "status": "live", "showInDestinations": true, "includes": ["sightseeing", "meals", "hotels", "transfer"], "inclusions": ["Sightseeing in a private car", "Stay in a handpicked hotel in Doodhpathri", "Daily breakfast and dinner", "Pickup and drop from Srinagar"]},
-    {"id": "peer-ki-gali", "title": "Peer Ki Gali · The High Pass", "location": "Peer Ki Gali · Mughal Road · Pir Panjal", "duration": "2 nights · 3 days", "price": "₹19,999", "category": "mountains", "tag": "Mountain pass", "description": "Take the historic Mughal Road into the Pir Panjal highlands, with time for sweeping pass views and the mountain air at its own pace.", "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Peer_Ki_Gali_Mughal_Road_Poonch_Srinagar.jpg/1200px-Peer_Ki_Gali_Mughal_Road_Poonch_Srinagar.jpg", "images": ["https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Peer_Ki_Gali_Mughal_Road_Poonch_Srinagar.jpg/1200px-Peer_Ki_Gali_Mughal_Road_Poonch_Srinagar.jpg"], "photoCredit": "Naveenkar · Public domain", "photoCreditUrl": "https://commons.wikimedia.org/wiki/File:Peer_Ki_Gali_Mughal_Road_Poonch_Srinagar.jpg", "featured": false, "status": "live", "showInDestinations": true, "includes": ["sightseeing", "meals", "hotels", "transfer"], "inclusions": ["Sightseeing in a private car along the Mughal Road", "Stay in a handpicked hotel", "Daily breakfast and dinner", "Pickup and drop from Srinagar"]},
-    {"id": "bangus-valley", "title": "Bangus Valley · Wide Open", "location": "Bangus Valley · Kupwara", "duration": "3 nights · 4 days", "price": "₹19,999", "category": "mountains", "tag": "Open valley", "description": "A slower journey through Kupwara's broad alpine valley, with long meadow views, forest edges and room to let the landscape set the pace.", "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Full%20view%20of%20bangus%20the%20paradise.jpg?width=1200", "images": ["https://commons.wikimedia.org/wiki/Special:FilePath/Full%20view%20of%20bangus%20the%20paradise.jpg?width=1200"], "photoCredit": "Idrees Lone 05 · CC BY-SA 4.0", "photoCreditUrl": "https://commons.wikimedia.org/wiki/File:Full_view_of_bangus_the_paradise.jpg", "featured": true, "status": "live", "showInDestinations": true, "includes": ["sightseeing", "meals", "hotels", "transfer"], "inclusions": ["Sightseeing in a private car", "Stay in a handpicked hotel in Kupwara", "Daily breakfast and dinner", "Pickup and drop from Srinagar"]}
+    {
+      "id": "p1",
+      "title": "Kashmir, in full colour",
+      "location": "Srinagar · Dal Lake houseboat · Pahalgam",
+      "duration": "6 nights · 7 days",
+      "price": "₹15,999",
+      "category": "valley",
+      "tag": "Signature",
+      "description": "Six nights with four in Srinagar, one on a Dal Lake houseboat and the final night in Pahalgam.",
+      "image": "https://images.unsplash.com/photo-1569852837213-00d97a707a83?auto=format&fit=crop&w=900&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1569852837213-00d97a707a83?auto=format&fit=crop&w=1200&q=85"
+      ],
+      "featured": true,
+      "status": "live",
+      "showInDestinations": false,
+      "pickupPoint": "Srinagar Airport",
+      "dropoffPoint": "Srinagar Airport",
+      "itinerary": [
+        {
+          "nights": 4,
+          "stay": "Srinagar",
+          "details": "Stay in Srinagar and explore the lakefront, gardens and old city at an easy pace."
+        },
+        {
+          "nights": 1,
+          "stay": "Dal Lake houseboat",
+          "details": "Spend one night aboard a houseboat on Dal Lake."
+        },
+        {
+          "nights": 1,
+          "stay": "Pahalgam",
+          "details": "Finish in Pahalgam; choose your preferred departure point for the trip."
+        }
+      ]
+    },
+    {
+      "id": "p3",
+      "title": "A softer kind of north",
+      "location": "Srinagar · Dal Lake houseboat · Pahalgam",
+      "duration": "4 nights · 5 days",
+      "price": "₹12,500",
+      "category": "valley",
+      "tag": "Slow escape",
+      "description": "Four nights: two in Srinagar, one on a Dal Lake houseboat and the final night in Pahalgam.",
+      "image": "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=900&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1200&q=85"
+      ],
+      "featured": true,
+      "status": "live",
+      "showInDestinations": false,
+      "pickupPoint": "Srinagar Airport",
+      "dropoffPoint": "Srinagar Airport",
+      "itinerary": [
+        {
+          "nights": 2,
+          "stay": "Srinagar",
+          "details": "Stay in Srinagar and explore the lakefront, gardens and old city."
+        },
+        {
+          "nights": 1,
+          "stay": "Dal Lake houseboat",
+          "details": "Spend one night aboard a houseboat on Dal Lake."
+        },
+        {
+          "nights": 1,
+          "stay": "Pahalgam",
+          "details": "Finish in Pahalgam; choose your preferred departure point for the trip."
+        }
+      ]
+    },
+    {
+      "id": "p5",
+      "title": "Winter, warmly",
+      "location": "Srinagar · Dal Lake houseboat · Pahalgam",
+      "duration": "5 nights · 6 days",
+      "price": "₹14,500",
+      "category": "mountains",
+      "tag": "Seasonal",
+      "description": "Five nights: three in Srinagar, one on a Dal Lake houseboat and the final night in Pahalgam.",
+      "image": "https://images.unsplash.com/photo-1517299321609-52687d1bc55a?auto=format&fit=crop&w=900&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1517299321609-52687d1bc55a?auto=format&fit=crop&w=1200&q=85"
+      ],
+      "featured": false,
+      "status": "live",
+      "showInDestinations": false,
+      "pickupPoint": "Srinagar Airport",
+      "dropoffPoint": "Srinagar Airport",
+      "itinerary": [
+        {
+          "nights": 3,
+          "stay": "Srinagar",
+          "details": "Stay in Srinagar and explore the lakefront, gardens and old city."
+        },
+        {
+          "nights": 1,
+          "stay": "Dal Lake houseboat",
+          "details": "Spend one night aboard a houseboat on Dal Lake."
+        },
+        {
+          "nights": 1,
+          "stay": "Pahalgam",
+          "details": "Finish in Pahalgam; choose your preferred departure point for the trip."
+        }
+      ]
+    }
   ],
   "testimonials": [
-    {"id": "t1", "quote": "The trip felt like it had been made just for us. No rushing, no guesswork — just beautiful days and kind people.", "name": "Mithun Das", "location": "Kolkata · Kashmir valley", "rating": 5},
-    {"id": "t2", "quote": "Tiny Hues found the balance we were looking for: a little adventure, a lot of warmth and enough time to simply look around.", "name": "Mohammed Nabi", "location": "Delhi · Gulmarg & Pahalgam", "rating": 5},
-    {"id": "t3", "quote": "Every detail was handled before we even had to ask. We came back with a softer pace and a camera roll full of magic.", "name": "Ananya Rao", "location": "Bengaluru · A soulful circuit", "rating": 5}
-  ]
+    {
+      "id": "g-review-1",
+      "quote": "Our honeymoon in Kashmir was magical. Romantic stays, scenic views, and special care at every place. Thank you for making it so special ❤️",
+      "name": "Taimor Aslam",
+      "location": "Google review · 9 months ago",
+      "rating": 5,
+      "source": "Google"
+    },
+    {
+      "id": "g-review-2",
+      "quote": "This travel agency made our dream of visiting Kashmir come true. Professional staff, polite drivers, and beautiful locations. Truly unforgettable🫶❣️",
+      "name": "Salman Aslam",
+      "location": "Google review · 9 months ago",
+      "rating": 5,
+      "source": "Google"
+    },
+    {
+      "id": "g-review-3",
+      "quote": "Best tour in Kashmir best car service and best driver khurshid bhai",
+      "name": "Shahebaz Tamboli",
+      "location": "Google review · 9 months ago",
+      "rating": 5,
+      "source": "Google"
+    },
+    {
+      "id": "g-review-4",
+      "quote": "One of the best tour planners in kashmir. The staff is absolutely good and helpful even in their off times they don’t hesitate to help.",
+      "name": "Farzan Meer",
+      "location": "Google review · a year ago",
+      "rating": 5,
+      "source": "Google"
+    }
+  ],
+  "contentRevision": 4
 }
