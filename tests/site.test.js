@@ -144,3 +144,13 @@ test('seo helpers', () => {
   assert.equal(seo.priceNumber('Custom'), null);
   assert.equal(seo.isRealProfile('https://www.facebook.com/public/Tiny-Hues-Tours-and-Travels'), false);
 });
+
+test('missing journey links get the branded 404 page with live suggestions', async () => {
+  const res = await call(home, { query: { journey: 'deleted-trip' } });
+  assert.equal(res.statusCode, 404);
+  assert.match(res.body, /This trail <em>fades out<\/em> here/);
+  assert.match(res.body, /noindex/);
+  assert.equal((res.body.match(/class="package-card"/g) || []).length, 3);
+  assert.doesNotMatch(res.body, /<!--journeys-->/);
+  assert.doesNotMatch(res.body, /Winter, warmly/);
+});

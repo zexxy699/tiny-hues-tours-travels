@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page not found | Tiny Hues Tours &amp; Travels</title>
+  <meta name="description" content="This page could not be found. Explore Kashmir tour packages from Tiny Hues Tours & Travels, Srinagar." />
+  <meta name="robots" content="noindex, follow" />
+  <meta name="theme-color" content="#0a2940" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="icon" href="/assets/tiny-hues-logo.png" type="image/png" />
+  <link rel="apple-touch-icon" href="/assets/tiny-hues-logo.png" />
+</head>
+<body class="not-found-page">
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="/" aria-label="Tiny Hues home">
+        <span class="brand-logo"><img src="/assets/tiny-hues-logo.png" alt="Tiny Hues Tours & Travels logo" width="66" height="66"></span>
+        <span class="brand-copy"><strong>TINY HUES</strong><small>TOURS & TRAVELS</small></span>
+      </a>
+      <a class="button button-small button-dark" href="/#contact">Plan my trip <span class="icon icon-arrow" aria-hidden="true"></span></a>
+    </div>
+  </header>
+
+  <main>
+    <section class="nf-hero" aria-labelledby="nfTitle">
+      <svg class="nf-ridge" viewBox="0 0 1200 330" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <path d="M0 230 L170 120 L290 190 L470 40 L640 175 L760 110 L930 205 L1060 130 L1200 190 V330 H0Z" fill="#fff" opacity=".05"/>
+        <path d="M0 280 L210 190 L400 255 L610 150 L820 245 L1010 185 L1200 240 V330 H0Z" fill="#fff" opacity=".07"/>
+        <path d="M0 330 V300 C200 270 360 318 600 292 S1000 262 1200 300 V330Z" fill="#fbfcfa"/>
+      </svg>
+      <div class="container nf-hero-inner">
+        <span class="nf-code" aria-hidden="true">404</span>
+        <span class="kicker nf-kicker">PAGE NOT FOUND</span>
+        <h1 id="nfTitle">This trail <em>fades out</em> here.</h1>
+        <p>The page you were looking for may have moved, or the link may have a small typo. The valley is still right where we left it.</p>
+        <div class="nf-actions">
+          <a class="button button-light" href="/">Back to the homepage <span class="icon icon-arrow" aria-hidden="true"></span></a>
+          <a class="button nf-button-ghost" href="/#packages">Browse all journeys</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section nf-suggestions" aria-labelledby="nfSuggestTitle">
+      <div class="container">
+        <div class="nf-suggest-head">
+          <div><span class="kicker">PERHAPS YOU WERE LOOKING FOR</span><h2 id="nfSuggestTitle">Journeys guests <em>love</em></h2></div>
+          <a class="arrow-link" href="/#packages">See every journey <span class="icon icon-arrow" aria-hidden="true"></span></a>
+        </div>
+        <div id="notFoundJourneys" class="package-grid nf-grid"><!--journeys--></div>
+        <div class="nf-help">
+          <p><strong>Still can't find it?</strong> Message us and a real person will point you the right way.</p>
+          <a class="button button-dark" href="https://wa.me/916006473963" target="_blank" rel="noopener noreferrer">Chat on WhatsApp <span class="icon icon-arrow" aria-hidden="true"></span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="nf-footer"><div class="container"><span>© Tiny Hues Tours &amp; Travels · Srinagar, Kashmir</span><a href="/">tinyhuestour.com</a></div></footer>
+
+  <script src="/render.js"></script>
+  <script>
+    // On the static 404 (any unknown address) fill the suggestions in the browser;
+    // missing journey links get them rendered on the server instead.
+    (function () {
+      var grid = document.getElementById('notFoundJourneys');
+      if (!grid || grid.querySelector('.package-card') || !window.TinyHuesRender) return;
+      fetch('/api/content').then(function (r) { return r.ok ? r.json() : null; }).then(function (result) {
+        var packages = (result && result.content && result.content.packages) || [];
+        var picks = window.TinyHuesRender.suggestedJourneys(packages, 3);
+        if (picks.length) grid.innerHTML = picks.map(window.TinyHuesRender.packageCardHtml).join('');
+        else hideSuggestions();
+      }).catch(hideSuggestions);
+      function hideSuggestions() { grid.closest('.nf-suggestions').querySelector('.nf-suggest-head').hidden = true; }
+    }());
+  </script>
+</body>
+</html>

@@ -7,9 +7,25 @@ const seo = require('../lib/seo');
 const { readSiteDataOrDefaults, publicContent } = require('../lib/site-data');
 
 let template;
+let notFoundTemplate;
 function loadTemplate() {
   template ||= fs.readFileSync(path.join(__dirname, '..', 'outputs', 'index.html'), 'utf8');
   return template;
+}
+function loadNotFoundTemplate() {
+  notFoundTemplate ||= fs.readFileSync(path.join(__dirname, '..', '404.html'), 'utf8');
+  return notFoundTemplate;
+}
+
+// A journey link that no longer exists gets the branded 404 page, with live suggestions.
+function renderNotFound(data) {
+  try {
+    const cards = R.suggestedJourneys(data.packages, 3).map(R.packageCardHtml).join('');
+    return loadNotFoundTemplate().replace('<!--journeys-->', cards);
+  } catch (error) {
+    console.error('404 template unavailable', error);
+    return null;
+  }
 }
 
 function fill(html, vars) {
@@ -23,6 +39,10 @@ function renderPage(content, journeyKey) {
   const s = data.settings;
   const journey = journeyKey ? R.findJourney(data.packages, journeyKey) : null;
   const notFound = Boolean(journeyKey && !journey);
+  if (notFound) {
+    const page = renderNotFound(data);
+    if (page) return { html: page, status: 404 };
+  }
   const meta = seo.pageMeta(data, journey, { notFound });
   const packages = R.filterPackages(data.packages, 'all', '');
   const html = fill(loadTemplate(), {

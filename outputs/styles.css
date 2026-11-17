@@ -349,3 +349,43 @@ body:not(.admin-page) .admin-link,body:not(.admin-page) .rail-heading>p,body:not
 .section-heading h2 em,.story-content h2 em,.testimonial-top h2 em,.contact-intro h2 em{color:#5b8f85}
 /* The decorative "Most loved" card collided with the hero buttons on phones. */
 @media(max-width:720px){body:not(.admin-page) .hero-float-card{display:none}}
+
+/* ---------- 404 page ---------- */
+.not-found-page{background:#fbfcfa}
+.not-found-page .site-header{position:sticky;top:0}
+.nf-hero{position:relative;overflow:hidden;color:#fff;background:linear-gradient(115deg,#071f33 0%,#0c3853 58%,#16506a 100%);padding:96px 0 150px}
+.nf-ridge{position:absolute;left:0;right:0;bottom:-1px;width:100%;height:240px}
+.nf-hero-inner{position:relative;max-width:760px;margin-left:max(36px,calc((100% - 1170px)/2))}
+.nf-code{position:absolute;right:-40px;top:-50px;font-family:'Newsreader',Georgia,serif;font-size:260px;line-height:1;font-weight:500;letter-spacing:-.05em;color:rgba(255,255,255,.06);pointer-events:none;user-select:none}
+.nf-kicker{color:#e7b878!important}
+.nf-hero h1{font-family:'Newsreader',Georgia,serif;font-weight:500;font-size:68px;line-height:1.02;letter-spacing:-.035em;margin:16px 0 20px}
+.nf-hero h1 em{color:#e7b878;font-style:italic}
+.nf-hero p{max-width:540px;margin:0;color:#d4e4e8;font-size:17px;line-height:1.7}
+.nf-actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
+.nf-actions .button-light{background:#f9f5eb;color:var(--night)}
+.nf-button-ghost{border:1px solid rgba(255,255,255,.45);color:#fff;background:transparent}
+.nf-button-ghost:hover{background:rgba(255,255,255,.08)}
+.nf-actions .button:focus-visible,.nf-help .button:focus-visible{outline:2px solid #e7b878;outline-offset:3px}
+.nf-suggestions{padding-top:40px}
+.nf-suggest-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:28px}
+.nf-suggest-head[hidden]{display:none}
+.nf-suggest-head h2{font-family:'Newsreader',Georgia,serif;font-weight:500;font-size:44px;line-height:1.05;letter-spacing:-.03em;margin:10px 0 0}
+.nf-suggest-head h2 em{color:#5b8f85}
+.nf-grid:empty{display:none}
+.nf-help{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-top:44px;padding:24px 28px;border:1px solid #e3ecee;border-radius:14px;background:#fff}
+.nf-help p{margin:0;font-size:16px;color:var(--ink)}
+.nf-footer{border-top:1px solid #e3ecee;padding:22px 0;font-size:13px;color:#5a6e79}
+.nf-footer .container{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+@media(max-width:720px){
+  .nf-hero{padding:64px 0 120px}
+  .nf-hero-inner{margin:0 auto}
+  .nf-code{font-size:150px;right:-6px;top:-30px}
+  .nf-hero h1{font-size:46px}
+  .nf-hero p{font-size:16px}
+  .nf-actions .button{width:100%}
+  .nf-suggest-head{flex-direction:column;align-items:flex-start}
+  .nf-suggest-head h2{font-size:34px}
+  .nf-help{flex-direction:column;align-items:stretch;text-align:left;padding:20px}
+  .nf-help .button{width:100%}
+}
+@media(max-width:400px){.not-found-page .site-header .button{padding:10px 12px;gap:8px}.not-found-page .site-header .button .icon{display:none}}

@@ -97,6 +97,12 @@
       && `${item.title} ${item.location} ${item.category}`.toLowerCase().includes(q));
   }
 
+  // Featured live journeys first, for the "not found" page.
+  function suggestedJourneys(packages, count = 3) {
+    const live = (packages || []).filter(item => item.status === 'live');
+    return live.filter(item => item.featured).concat(live.filter(item => !item.featured)).slice(0, count);
+  }
+
   function destinationsHtml(packages) {
     const list = (packages || []).filter(item => item.status === 'live' && item.showInDestinations);
     return list.map((item, index) => `<a class="destination-card ${index === 0 ? 'destination-card-tall' : ''}" href="${journeyPath(item)}" data-destination-package="${escapeHtml(item.id)}"><img loading="lazy" decoding="async" src="${escapeHtml(photosOf(item)[0] || '')}" alt="${escapeHtml(shortTitle(item))}, Kashmir" width="600" height="800"><span class="destination-number">${String(index + 1).padStart(2, '0')}</span><div><span>${escapeHtml(item.tag || 'Kashmir escape')}</span><h3>${escapeHtml(shortTitle(item))}</h3><b>Explore <span class="icon icon-arrow" aria-hidden="true"></span></b></div></a>`).join('');
@@ -140,7 +146,7 @@
   return {
     escapeHtml, cssUrl, slugify, journeySlug, journeyPath, findJourney, photosOf, shortTitle, initials,
     heroTitleHtml, heroTitleText, INCLUDE_TYPES, includeIcon, includesOf, inclusionsOf, cardIncludesHtml,
-    includesSectionHtml, packageCardHtml, filterPackages, destinationsHtml, leadersHtml, testimonialHtml,
+    includesSectionHtml, packageCardHtml, filterPackages, suggestedJourneys, destinationsHtml, leadersHtml, testimonialHtml,
     whatsappTripLink, journeyDialogHtml
   };
 }));
