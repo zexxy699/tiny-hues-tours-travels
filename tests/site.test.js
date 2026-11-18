@@ -18,7 +18,7 @@ test.beforeEach(() => mock.store.clear());
 test('existing saved content gets the inclusions and Facebook link once (revision 5)', async () => {
   await mock.put(CONTENT_PATH, JSON.stringify({ contentRevision: 4, settings: { facebook: '' }, packages: [{ id: 'p1', title: 'Kashmir, in full colour', status: 'live' }, { id: 'p3', title: 'x', status: 'live', includes: [] }], testimonials: [] }), { allowOverwrite: true });
   const data = await readSiteData();
-  assert.equal(data.contentRevision, 6);
+  assert.equal(data.contentRevision, 7);
   assert.ok(data.packages[0].includes.includes('houseboat'));
   assert.ok(data.packages[0].inclusions.length > 0);
   assert.deepEqual(data.packages[1].includes, [], 'an admin choice of "nothing included" is kept');
@@ -122,7 +122,7 @@ test('sitemap lists the homepage and live journeys on www', async () => {
 test('saved settings switch to the new call and WhatsApp numbers (revision 6)', async () => {
   await mock.put(CONTENT_PATH, JSON.stringify({ contentRevision: 5, settings: { phone: '+91 6006473963', operationsPhone: '+91 6005577032', whatsapp: 'https://wa.me/916005577032' }, packages: [], testimonials: [] }), { allowOverwrite: true });
   const s = (await readSiteData()).settings;
-  assert.equal(s.phone, '+91 6005577032');
+  assert.equal(s.phone, '+91 6006473963', 'footer keeps its first number');
   assert.equal(s.operationsPhone, '+91 6005577032');
   assert.equal(s.whatsapp, 'https://wa.me/916006473963');
   // runs once: a later admin edit is kept

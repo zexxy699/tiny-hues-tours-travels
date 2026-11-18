@@ -16,7 +16,7 @@ const defaultData = {
   settings: {
     brandName: 'Tiny Hues Tours & Travels',
     tagline: 'Curated Kashmir journeys',
-    phone: '+91 6005577032',
+    phone: '+91 6006473963',
     operationsPhone: '+91 6005577032',
     email: 'infotinyhuestourandtravels316@gmail.com',
     whatsapp: CURRENT_WHATSAPP,
@@ -255,9 +255,10 @@ function renderSiteSettings() {
   const phone = document.getElementById('footerPhone');
   if (phone) { phone.textContent = s.phone; phone.href = `tel:${s.phone.replace(/\s/g, '')}`; }
   const deskPhone = document.getElementById('footerDeskPhone');
-  if (deskPhone) { deskPhone.textContent = s.operationsPhone; deskPhone.href = `tel:${s.operationsPhone.replace(/\s/g, '')}`; deskPhone.hidden = String(s.operationsPhone || '').replace(/\D/g, '') === String(s.phone || '').replace(/\D/g, ''); }
+  if (deskPhone) { deskPhone.textContent = s.operationsPhone; deskPhone.href = `tel:${s.operationsPhone.replace(/\s/g, '')}`; }
   const directPhone = document.getElementById('directPhone');
-  if (directPhone) { directPhone.textContent = s.phone; directPhone.href = `tel:${s.phone.replace(/\s/g, '')}`; }
+  const callNumber = s.operationsPhone || s.phone;
+  if (directPhone) { directPhone.textContent = callNumber; directPhone.href = `tel:${callNumber.replace(/\s/g, '')}`; }
   const email = document.getElementById('footerEmail');
   if (email) { email.textContent = s.email; email.href = `mailto:${s.email}`; }
   const whatsapp = document.getElementById('directWhatsapp');
