@@ -832,3 +832,4 @@ body:not(.admin-page) .modal-includes-panel .include-strip li{font-size:11px;fon
   body:not(.admin-page) .package-modal{max-height:calc(100svh - 50px)}
   body:not(.admin-page) .modal-body{max-height:calc(100svh - 50px);overflow-y:auto;overscroll-behavior:contain}
 }
+#footerDeskPhone[hidden]{display:none!important}

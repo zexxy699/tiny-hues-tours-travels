@@ -2,10 +2,10 @@
   "settings": {
     "brandName": "Tiny Hues Tours & Travels",
     "tagline": "Curated Kashmir journeys",
-    "phone": "+91 6006473963",
+    "phone": "+91 6005577032",
     "operationsPhone": "+91 6005577032",
     "email": "infotinyhuestourandtravels316@gmail.com",
-    "whatsapp": "https://wa.me/916005577032",
+    "whatsapp": "https://wa.me/916006473963",
     "whatsappQr": "",
     "contactVersion": "contacts-v2",
     "instagram": "https://instagram.com/tinyhuestourandtravels",
@@ -227,5 +227,5 @@
       "source": "Google"
     }
   ],
-  "contentRevision": 5
+  "contentRevision": 6
 }

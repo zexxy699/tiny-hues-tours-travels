@@ -9,14 +9,14 @@ const KASHMIR_HERO_IMAGES = [
 const KASHMIR_CARD_IMAGE = 'https://images.unsplash.com/photo-1569852837213-00d97a707a83?auto=format&fit=crop&w=900&q=85';
 const HERO_IMAGE_VERSION = 'kashmir-cover-v4';
 const HERO_SLIDE_INTERVAL = 29000;
-const CURRENT_WHATSAPP = 'https://wa.me/916005577032';
+const CURRENT_WHATSAPP = 'https://wa.me/916006473963';
 const COOKIE_CONSENT_KEY = 'tinyHuesCookieConsent';
 
 const defaultData = {
   settings: {
     brandName: 'Tiny Hues Tours & Travels',
     tagline: 'Curated Kashmir journeys',
-    phone: '+91 6006473963',
+    phone: '+91 6005577032',
     operationsPhone: '+91 6005577032',
     email: 'infotinyhuestourandtravels316@gmail.com',
     whatsapp: CURRENT_WHATSAPP,
@@ -255,7 +255,7 @@ function renderSiteSettings() {
   const phone = document.getElementById('footerPhone');
   if (phone) { phone.textContent = s.phone; phone.href = `tel:${s.phone.replace(/\s/g, '')}`; }
   const deskPhone = document.getElementById('footerDeskPhone');
-  if (deskPhone) { deskPhone.textContent = s.operationsPhone; deskPhone.href = `tel:${s.operationsPhone.replace(/\s/g, '')}`; }
+  if (deskPhone) { deskPhone.textContent = s.operationsPhone; deskPhone.href = `tel:${s.operationsPhone.replace(/\s/g, '')}`; deskPhone.hidden = String(s.operationsPhone || '').replace(/\D/g, '') === String(s.phone || '').replace(/\D/g, ''); }
   const directPhone = document.getElementById('directPhone');
   if (directPhone) { directPhone.textContent = s.phone; directPhone.href = `tel:${s.phone.replace(/\s/g, '')}`; }
   const email = document.getElementById('footerEmail');

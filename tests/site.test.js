@@ -18,7 +18,7 @@ test.beforeEach(() => mock.store.clear());
 test('existing saved content gets the inclusions and Facebook link once (revision 5)', async () => {
   await mock.put(CONTENT_PATH, JSON.stringify({ contentRevision: 4, settings: { facebook: '' }, packages: [{ id: 'p1', title: 'Kashmir, in full colour', status: 'live' }, { id: 'p3', title: 'x', status: 'live', includes: [] }], testimonials: [] }), { allowOverwrite: true });
   const data = await readSiteData();
-  assert.equal(data.contentRevision, 5);
+  assert.equal(data.contentRevision, 6);
   assert.ok(data.packages[0].includes.includes('houseboat'));
   assert.ok(data.packages[0].inclusions.length > 0);
   assert.deepEqual(data.packages[1].includes, [], 'an admin choice of "nothing included" is kept');
@@ -117,4 +117,17 @@ test('sitemap lists the homepage and live journeys on www', async () => {
   const res = await call(sitemap, { headers: { host: 'www.tinyhuestour.com' } });
   assert.match(res.body, /<loc>https:\/\/www.tinyhuestour.com\/<\/loc>/);
   assert.match(res.body, /<loc>https:\/\/www.tinyhuestour.com\/journeys\/[a-z0-9-]+<\/loc>/);
+});
+
+test('saved settings switch to the new call and WhatsApp numbers (revision 6)', async () => {
+  await mock.put(CONTENT_PATH, JSON.stringify({ contentRevision: 5, settings: { phone: '+91 6006473963', operationsPhone: '+91 6005577032', whatsapp: 'https://wa.me/916005577032' }, packages: [], testimonials: [] }), { allowOverwrite: true });
+  const s = (await readSiteData()).settings;
+  assert.equal(s.phone, '+91 6005577032');
+  assert.equal(s.operationsPhone, '+91 6005577032');
+  assert.equal(s.whatsapp, 'https://wa.me/916006473963');
+  // runs once: a later admin edit is kept
+  const saved = JSON.parse(mock.store.get(CONTENT_PATH).body.toString());
+  saved.settings.whatsapp = 'https://wa.me/919999999999';
+  await mock.put(CONTENT_PATH, JSON.stringify(saved), { allowOverwrite: true });
+  assert.equal((await readSiteData()).settings.whatsapp, 'https://wa.me/919999999999');
 });
